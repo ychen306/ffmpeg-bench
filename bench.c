@@ -13,7 +13,7 @@ void quantize_bands(int *out, const float *in, const float *scaled,
     int size, int is_signed, int maxval, const float Q34,
     const float rounding);
 
-void ff_h264_luma_dc_dequant_idct(uint8_t *_dst, int16_t *_block, int stride);
+void ff_h264_luma_dc_dequant_idct(int16_t *_output, int16_t *_input, int qmul);
 
 void bench_ff_h264_idct_add() {
   uint8_t dst[4 * 4];
