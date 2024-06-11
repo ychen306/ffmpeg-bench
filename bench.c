@@ -1,6 +1,9 @@
 #include <stdint.h>
 
 void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride);
+void scalarproduct_and_madd_int16_cint16_t (int16_t *v1, const int16_t *v2,
+                                              const int16_t *v3,
+                                              int order, int mul);
 void bench_ff_h264_idct_add() {
   uint8_t dst[4 * 4];
   int16_t block[4 * 4];
