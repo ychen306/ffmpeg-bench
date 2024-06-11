@@ -1,12 +1,8 @@
-//
-// Created by dthek on 6/11/2024.
-//
-
 //https://github.com/FFmpeg/FFmpeg/blob/9dac8495b0020f7326bbe79efa070a0150109afc/libavcodec/lossless_audiodsp.c#L27
 
 #include <stdint.h>
 
-static int32_t scalarproduct_and_madd_int16_c(int16_t *v1, const int16_t *v2,
+int scalarproduct_and_madd_int16(int16_t *v1, const int16_t *v2,
                                               const int16_t *v3,
                                               int order, int mul)
 {
