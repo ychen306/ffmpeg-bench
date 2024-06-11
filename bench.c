@@ -74,6 +74,8 @@ void bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   for (int i = 0; i < 16; i++) {
     input[i] = i;
+
+  ff_h264_luma_dc_dequant_idct(output, input, qmul);
   }
 
 }
@@ -85,4 +87,6 @@ int main() {
   bench_ff_h264_idct_add();
   bench_scalarproduct_and_madd_int16();
   bench_scalarproduct_and_madd_int32();
+  // bench_quantize_bands();
+  bench_ff_h264_luma_dc_dequant_idct();
 }
