@@ -23,4 +23,4 @@ bench.asan: bench.asan.o h264-idct.asan.o
 	$(CC) -fsanitize=address $^ -o $@
 
 clean:
-	rm -f *.o bench
+	rm -f *.o bench bench.asan
