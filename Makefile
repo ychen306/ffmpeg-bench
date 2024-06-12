@@ -11,11 +11,14 @@ lossless_audiodsp.o: lossless_audiodsp.c
 aacencdsp.o: aacencdsp.c
 	$(CC) -O3 $^ -o $@ -c
 
+aacpsdsp.o: aacpsdsp.c
+	$(CC) -O3 $^ -o $@ -c
+
 bench.o: bench.c
 	$(CC) -O3 $^ -o $@ -c
 
 
-bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o
+bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o
 	$(CC) $^ -o $@
 
 ########## ASAN build #######
@@ -29,10 +32,13 @@ lossless_audiodsp.asan.o: lossless_audiodsp.c
 aacencdsp.asan.o: aacencdsp.c
 	$(CC) -Og $^ -o $@ -c -fsanitize=address
 
+aacpsdsp.asan.o: aacpsdsp.c
+	$(CC) -Og $^ -o $@ -c -fsanitize=address
+
 bench.asan.o: bench.c
 	$(CC) -Og $^ -o $@ -c -fsanitize=address
 
-bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o
+bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o
 	$(CC) -fsanitize=address $^ -o $@
 
 clean:
