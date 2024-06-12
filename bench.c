@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 
 void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride);
 
@@ -89,4 +90,5 @@ int main() {
   bench_scalarproduct_and_madd_int32();
   // bench_quantize_bands();
   bench_ff_h264_luma_dc_dequant_idct();
+  printf("test\n");
 }
