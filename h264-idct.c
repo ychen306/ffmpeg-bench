@@ -3,7 +3,8 @@
 
 #define SUINT int
 
-uint8_t av_clip_pixel(int x) {
+__attribute__((always_inline))  
+static uint8_t av_clip_pixel(int x) {
   if (x < 0)
     return 0;
   if (x > 255)
