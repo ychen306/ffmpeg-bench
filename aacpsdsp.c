@@ -20,15 +20,14 @@
 
 typedef int                 INTFLOAT;
 typedef unsigned            UINTFLOAT;
-// found defniition in https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aac_defines.h#L34C1-L35C39
-// should correct defs for testing,
-// this assumes used
+
+// found definition in https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aac_defines.h#L34C1-L35C39
+
 
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aacpsdsp_template.c#L146
 
-void ps_stereo_interpolate_c(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
-INTFLOAT h[2][4], INTFLOAT h_step[2][4],
-int len)
+void ps_stereo_interpolate(INTFLOAT (*l)[2], INTFLOAT (*r)[2],INTFLOAT h[2][4],
+    INTFLOAT h_step[2][4], int len)
 {
     INTFLOAT h0 = h[0][0];
     INTFLOAT h1 = h[0][1];
@@ -59,7 +58,7 @@ int len)
 
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aacpsdsp_template.c#L177
 
-void ps_stereo_interpolate_ipdopd_c(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
+void ps_stereo_interpolate_ipdopd(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
                                            INTFLOAT h[2][4], INTFLOAT h_step[2][4],
                                            int len)
 {
