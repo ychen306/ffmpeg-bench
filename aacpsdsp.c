@@ -26,6 +26,8 @@ typedef unsigned            UINTFLOAT;
 
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aacpsdsp_template.c#L146
 
+// stack and heap stuff
+
 void ps_stereo_interpolate(INTFLOAT (*l)[2], INTFLOAT (*r)[2],INTFLOAT h[2][4],
     INTFLOAT h_step[2][4], int len)
 {
