@@ -16,7 +16,7 @@ static uint8_t av_clip_pixel(int x) {
 #define dctcoef int16_t
 
 // https://github.com/FFmpeg/FFmpeg/blob/release/7.0/libavcodec/h264idct_template.c#L32
-void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride)
+void ff_h264_idct_add(uint8_t *__restrict__ _dst, int16_t *__restrict__ _block, int stride)
 {
     int i;
     pixel *dst = (pixel*)_dst;

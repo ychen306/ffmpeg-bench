@@ -8,6 +8,8 @@
 #define INTFLOAT int
 #define UINTFLOAT unsigned
 
+#define NUM_TESTS 100
+#define cycle_t unsigned long long
 
 int *rand_array(int size);
 
@@ -117,24 +119,41 @@ RAND_INT(64)
 
 // still having issues with pointers and pointer conversion
 void bench_ps_stereo_interpolate() {
+  const int len = 42;
   srand(22);
-  INTFLOAT (*l)[2] = {rand_array(2), rand_array(2)};
-  INTFLOAT (*r)[2] =
+  INTFLOAT (**l)[2] = malloc(sizeof(uintptr_t) * len);
+  INTFLOAT (**r)[2] = malloc(sizeof(uintptr_t) * len);
+  for (int i = 0; i < len; i++) {
+    l[i] = rand_array(2);
+    r[i] = rand_array(2);
+  }
 
-    // len arrays of size 2^^
-      // can't just use
-
-  INTFLOAT h[2][4] = {rand_array(4), rand_array(4)};
-  // INTFLOAT (*h)[2][4] = rand_array(2 * 4);
+  // len arrays of size 2^^
+  // can't just use
+  INTFLOAT (*h)[2][4] = rand_array(2 * 4);
 
   // then go thorugh and make each one their own random values
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
   // dont make len a random variable, set at certain value
-  const int len = rand64();
-  ps_stereo_interpolate(l, r, h, h_step, len);
-  printf("%d \n", 9);
-  for (int i = 0; i<2; i++)
-    printf("%d", *h[i]);
+
+  cycle_t begin, end, elapsed1, elapsed2;
+  begin = __builtin_readcyclecounter();
+  for (int i = 0; i < NUM_TESTS; i++)
+    ps_stereo_interpolate(l, r, h, h_step, len);
+  end = __builtin_readcyclecounter();
+  elapsed1 = end - begin;
+  begin = __builtin_readcyclecounter();
+  for (int i = 0; i < 2 * NUM_TESTS; i++)
+    ps_stereo_interpolate(l, r, h, h_step, len);
+  end = __builtin_readcyclecounter();
+  elapsed2 = end - begin;
+  cycle_t throughput = (elapsed2 - elapsed1) / NUM_TESTS;
+  printf("ps_stereo_interpolate: %llu\n", throughput);
+
+  //printf("%d \n", 9);
+  //for (int i = 0; i<2; i++)
+  //  printf("%d", *h[i]);
+
   free(l);
   free(r);
   // free(h);
