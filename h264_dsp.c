@@ -30,7 +30,7 @@ static inline uint8_t av_clip_pixel(int x) {
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/h264dsp_template.c#L32
 
 #define H264_WEIGHT(W) \
-void FUNCC(weight_h264_pixels ## W)(uint8_t *_block, ptrdiff_t stride, int height, \
+void FUNCC(weight_h264_pixels ## W)(uint8_t *__restrict__ _block, ptrdiff_t stride, int height, \
                                            int log2_denom, int weight, int offset) \
 { \
     int y; \
@@ -60,7 +60,7 @@ void FUNCC(weight_h264_pixels ## W)(uint8_t *_block, ptrdiff_t stride, int heigh
         op_scale1(15); \
     } \
 } \
-void FUNCC(biweight_h264_pixels ## W)(uint8_t *_dst, uint8_t *_src, ptrdiff_t stride, int height, \
+void FUNCC(biweight_h264_pixels ## W)(uint8_t *__restrict__ _dst, uint8_t *__restrict__ _src, ptrdiff_t stride, int height, \
                                              int log2_denom, int weightd, int weights, int offset) \
 { \
     int y; \

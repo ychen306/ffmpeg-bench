@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-int32_t scalarproduct_and_madd_int16(int16_t *v1, const int16_t *v2,
-                                              const int16_t *v3,
+int32_t scalarproduct_and_madd_int16(int16_t *__restrict__ v1, const int16_t *__restrict__ v2,
+                                              const int16_t *__restrict__ v3,
                                               int order, int mul)
 {
     unsigned res = 0;
@@ -17,8 +17,8 @@ int32_t scalarproduct_and_madd_int16(int16_t *v1, const int16_t *v2,
     return res;
 }
 
-int32_t scalarproduct_and_madd_int32(int16_t *v1, const int32_t *v2,
-                                              const int16_t *v3,
+int32_t scalarproduct_and_madd_int32(int16_t *__restrict__ v1, const int32_t *__restrict__ v2,
+                                              const int16_t *__restrict__ v3,
                                               int order, int mul)
 {
     int res = 0;

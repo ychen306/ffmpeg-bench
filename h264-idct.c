@@ -54,7 +54,7 @@ void ff_h264_idct_add(uint8_t *__restrict__ _dst, int16_t *__restrict__ _block, 
 
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/h264idct_template.c#L251
 
-void ff_h264_luma_dc_dequant_idct(int16_t *_output, int16_t *_input, int qmul){
+void ff_h264_luma_dc_dequant_idct(int16_t *__restrict__ _output, int16_t *__restrict__ _input, int qmul){
 #define stride 16
     int i;
     int temp[16];
