@@ -1,6 +1,7 @@
 MAKE := make
 .PHONY: all clean
 
+CC := clang-18
 all: bench bench.asan
 
 h264-idct.o: h264-idct.c
@@ -18,11 +19,14 @@ aacpsdsp.o: aacpsdsp.c
 h264_dsp.o: h264_dsp.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS)
 
+h263dsp.o: h263dsp.c
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS)
+
 bench.o: bench.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS)
 
 
-bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o h264_dsp.o
+bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o h264_dsp.o h263dsp.o
 	$(CC) $^ -o $@
 
 ########## ASAN build #######
@@ -39,10 +43,16 @@ aacencdsp.asan.o: aacencdsp.c
 aacpsdsp.asan.o: aacpsdsp.c
 	$(CC) -O0 $^ -o $@ -c -fsanitize=address -g
 
+h264_dsp.asan.o: h264_dsp.c
+	$(CC) -O0 $^ -o $@ -c -fsanitize=address -g
+
+h263dsp.asan.o: h263dsp.c
+	$(CC) -O0 $^ -o $@ -c -fsanitize=address -g
+
 bench.asan.o: bench.c
 	$(CC) -O0 $^ -o $@ -c -fsanitize=address -g
 
-bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o
+bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o h263dsp.asan.o h264_dsp.asan.o
 	$(CC) -fsanitize=address $^ -o $@ -g
 
 clean:
