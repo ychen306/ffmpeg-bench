@@ -38,20 +38,22 @@ void ps_stereo_interpolate_ipdopd(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS) cycle_t begin, end, elapsed1, elapsed2;     \
         begin = __builtin_readcyclecounter();                             \
         for (int i = 0; i < NUM_TESTS; i++)                               \
-          FUNC_W_ARGS                                                     \
+          FUNC_W_ARGS;                                                    \
         end = __builtin_readcyclecounter();                               \
         elapsed1 = end - begin;                                           \
         begin = __builtin_readcyclecounter();                             \
         for (int i = 0; i < 2 * NUM_TESTS; i++)                           \
-          FUNC_W_ARGS                    \
+          FUNC_W_ARGS;                                                    \
         end = __builtin_readcyclecounter();                               \
         elapsed2 = end - begin;                                           \
         cycle_t throughput = (elapsed2 - elapsed1) / NUM_TESTS;           \
 
 RAND_INT(8)
 RAND_INT(16)
-RAND_ARRAY(16)
 RAND_ARRAY(8)
+RAND_ARRAY(16)
+RAND_UINT(8)
+RAND_ARRAY_U(8)
 
 cycle_t bench_ff_h264_idct_add() {
   // set input size
@@ -62,6 +64,7 @@ cycle_t bench_ff_h264_idct_add() {
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 100)
   free(dst);
   free(block);
+  printf("ff_h264_idct_add: %llu \n", throughput);
   return throughput;
 }
 
@@ -71,12 +74,13 @@ cycle_t bench_scalarproduct_and_madd_int16() {
   int16_t *v1 = rand_array_16(8);
   int16_t *v2 = rand_array_16(8);
   int16_t *v3 = rand_array_16(8);
-  int order = 16;
+  int order = 8;
   int mul = 2;
   BENCH_FUNC(scalarproduct_and_madd_int16(v1, v2, v3, order, mul), 100)
   free(v1);
   free(v2);
   free(v3);
+  printf("scalarproduct_and_madd_int16: %llu \n", throughput);
   return throughput;
 }
 
@@ -86,12 +90,13 @@ cycle_t bench_scalarproduct_and_madd_int32() {
   int16_t *v1 = rand_array_16(8);
   int16_t *v2 = rand_array_16(8);
   int16_t *v3 = rand_array_16(8);
-  int order = 16;
+  int order = 8;
   int mul = 2;
   BENCH_FUNC(scalarproduct_and_madd_int16(v1, v2, v3, order, mul), 100);
   free(v1);
   free(v2);
   free(v3);
+  printf("scalarproduct_and_madd_int32: %llu \n", throughput);
   return throughput;
 }
 
@@ -116,11 +121,11 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   BENCH_FUNC(ff_h264_luma_dc_dequant_idct(output, input, qmul), 100)
   free(input);
+  printf("ff_h264_luma_dc_dequant_idct: %llu \n", throughput);
   return throughput;
 }
 
 RAND_INT(64)
-
 
 
 
@@ -146,18 +151,49 @@ cycle_t bench_ps_stereo_interpolate() {
 
   BENCH_FUNC(ps_stereo_interpolate(l, r, h, h_step, len), 100)
   printf("ps_stereo_interpolate: %llu\n", throughput);
-// llu is long long unsigned int
+
+  // llu is long long unsigned int
   
   //printf("%d \n", 9);
   //for (int i = 0; i<2; i++)
   //  printf("%d", *h[i]);
 
+  // for (int i = 0; i < len; i++) {
+  //   free(l[i]);
+  //   free(r[i]);}
   free(l);
   free(r);
-  // free(h);
+
+  free(h);
   // free(h_step);
   return throughput;
 }
+
+// these two memory leak
+
+cycle_t bench_ps_stereo_interpolate_ipdopd() {
+  const int len = 42;
+  srand(99);
+  INTFLOAT (**l)[2] = malloc(sizeof(uintptr_t) * len);
+  INTFLOAT (**r)[2] = malloc(sizeof(uintptr_t) * len);
+  for (int i = 0; i < len; i++) {
+    l[i] = rand_array(2);
+    r[i] = rand_array(2);
+  }
+
+  INTFLOAT (*h)[2][4] = rand_array(2 * 4);
+
+  INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
+
+  BENCH_FUNC(ps_stereo_interpolate_ipdopd(l, r, h, h_step, len), 100)
+  printf("ps_stereo_interpolate_ipopd: %llu\n", throughput);
+
+  free(l);
+  free(r);
+  free(h);
+  return throughput;
+}
+
 
 
 
@@ -165,8 +201,8 @@ cycle_t bench_ps_stereo_interpolate() {
 int main() {
   bench_scalarproduct_and_madd_int16();
   bench_scalarproduct_and_madd_int32();
-  // bench_quantize_bands();
   bench_ff_h264_idct_add();
   bench_ff_h264_luma_dc_dequant_idct();
   bench_ps_stereo_interpolate();
+  bench_ps_stereo_interpolate_ipdopd();
 }
