@@ -14,7 +14,7 @@
         return arr;                                                             \
 }\
 
-#define RAND_ARRAY_U(B) static int ## B ## _t *(rand_array_u ## B)(int size){      \
+#define RAND_ARRAY_U(B) static uint ## B ## _t *(rand_array_u ## B)(int size){      \
         int ## B ## _t *arr = malloc(sizeof(int ## B ## _t) * size);            \
         for (int i = 0; i < size; i++)                                          \
             arr[i] = (randu ## B)();                                             \
