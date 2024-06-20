@@ -123,6 +123,7 @@ void bench_quantize_bands() {
 
 cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   // set input size
+  srand(77);
   int16_t output[15 * 16 + 1]; //not sure, stride is 16 and the final x_offset is 10*stride, so it should be 15*stride=240
   int16_t *input = rand_array_16(16);
   int qmul = 16; // just chose a number
@@ -205,8 +206,8 @@ cycle_t bench_h263_h_loop_filter() {
   srand(71);
   const int stride = 3;
   const int qscale = 24;
-  uint8_t *src = rand_array_u8(7*stride+2);
-  BENCH_FUNC(h263_h_loop_filter(src, stride, qscale), 100, throughput);
+  uint8_t *src = rand_array_u8(7*stride+4);
+  BENCH_FUNC(h263_h_loop_filter(src + 2, stride, qscale), 100, throughput);
   free(src);
   printf("h263_h_loop_filter: %llu \n", throughput);
   return throughput;
@@ -216,8 +217,8 @@ cycle_t bench_h263_v_loop_filter() {
   srand(13);
   const int stride = 3;
   const int qscale = 24;
-  uint8_t *src = rand_array_u8(7*stride+2);
-  BENCH_FUNC(h263_v_loop_filter(src, stride, qscale), 100, throughput);
+  uint8_t *src = rand_array_u8(3*stride + 8);
+  BENCH_FUNC(h263_v_loop_filter(src + 2 * stride, stride, qscale), 100, throughput);
   free(src);
   printf("h263_v_loop_filter: %llu \n", throughput);
   return throughput;
