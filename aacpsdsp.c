@@ -28,8 +28,8 @@ typedef unsigned            UINTFLOAT;
 
 // stack and heap stuff
 
-void ps_stereo_interpolate(INTFLOAT (*l)[2], INTFLOAT (*r)[2],INTFLOAT h[2][4],
-    INTFLOAT h_step[2][4], int len)
+void ps_stereo_interpolate(INTFLOAT (*__restrict__ l)[2], INTFLOAT (*__restrict__ r)[2],INTFLOAT h[__restrict__ 2][4],
+    INTFLOAT h_step[__restrict__ 2][4], int len)
 {
     INTFLOAT h0 = h[0][0];
     INTFLOAT h1 = h[0][1];
