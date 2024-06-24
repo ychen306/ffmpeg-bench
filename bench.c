@@ -52,7 +52,6 @@ void h263_v_loop_filter(uint8_t *__restrict__ src, int stride, int qscale);
         end = __builtin_readcyclecounter();                               \
         elapsed2 = end - begin;                                           \
         THROUGHPUT = (elapsed2 - elapsed1) / NUM_TESTS;           \
-        \
         }while(0)
 
 RAND_INT(8)
@@ -71,7 +70,7 @@ cycle_t bench_ff_h264_idct_add() {
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 100, throughput);
   free(dst);
   free(block);
-  printf("ff_h264_idct_add: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
@@ -87,7 +86,7 @@ cycle_t bench_scalarproduct_and_madd_int16() {
   free(v1);
   free(v2);
   free(v3);
-  printf("scalarproduct_and_madd_int16: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
@@ -103,7 +102,7 @@ cycle_t bench_scalarproduct_and_madd_int32() {
   free(v1);
   free(v2);
   free(v3);
-  printf("scalarproduct_and_madd_int32: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
@@ -129,7 +128,7 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   BENCH_FUNC(ff_h264_luma_dc_dequant_idct(output, input, qmul), 100, throughput);
   free(input);
-  printf("ff_h264_luma_dc_dequant_idct: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
@@ -158,7 +157,7 @@ cycle_t bench_ps_stereo_interpolate() {
   // dont make len a random variable, set at certain value
 
   BENCH_FUNC(ps_stereo_interpolate(l, r, h, h_step, len), 100, throughput);
-  printf("ps_stereo_interpolate: %llu\n", throughput);
+  printf("%llu ", throughput);
 
   // llu is long long unsigned int
   
@@ -194,7 +193,7 @@ cycle_t bench_ps_stereo_interpolate_ipdopd() {
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
   BENCH_FUNC(ps_stereo_interpolate_ipdopd(l, r, h, h_step, len), 100, throughput);
-  printf("ps_stereo_interpolate_ipopd: %llu\n", throughput);
+  printf("%llu ", throughput);
 
   free(l);
   free(r);
@@ -209,7 +208,7 @@ cycle_t bench_h263_h_loop_filter() {
   uint8_t *src = rand_array_u8(7*stride+4);
   BENCH_FUNC(h263_h_loop_filter(src + 2, stride, qscale), 100, throughput);
   free(src);
-  printf("h263_h_loop_filter: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
@@ -220,7 +219,7 @@ cycle_t bench_h263_v_loop_filter() {
   uint8_t *src = rand_array_u8(3*stride + 8);
   BENCH_FUNC(h263_v_loop_filter(src + 2 * stride, stride, qscale), 100, throughput);
   free(src);
-  printf("h263_v_loop_filter: %llu \n", throughput);
+  printf("%llu ", throughput);
   return throughput;
 }
 
