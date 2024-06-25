@@ -1,7 +1,7 @@
 MAKE := make
 .PHONY: all clean test run-tests
 
-CC := gcc
+CC := cc
 all: bench bench.asan bench.novec
 test: all run-tests
 
