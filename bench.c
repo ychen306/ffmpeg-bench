@@ -231,14 +231,14 @@ cycle_t bench_h263_v_loop_filter() {
 
 cycle_t bench_weight_h264_pixels16_8_c(){
   srand(59);
-  uint8_t *block = rand_array_u8(16);
-  ptrdiff_t stride = 8;
-  int height = 8;
+  uint8_t *_block = rand_array_u8(64);
+  ptrdiff_t stride = 16;
+  int height = 4;
   int log2_denom = 4;
-  int weight;
+  int weight = 8;
   int offset = 4;
-  BENCH_FUNC(weight_h264_pixels16_8_c(block, stride, height, log2_denom, weight, offset), 100, throughput);
-  free(block);
+  BENCH_FUNC(weight_h264_pixels16_8_c(_block, stride, height, log2_denom, weight, offset), 100, throughput);
+  free(_block);
   printf("%llu", throughput);
   return throughput;
 }
