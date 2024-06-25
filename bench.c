@@ -4,6 +4,12 @@
 #include <stddef.h>
 #include "random_ints_arrays.h"
 
+#ifdef _MSC_VER
+# include <intrin.h>
+#else
+# include <x86intrin.h>
+#endif
+
 // check all original kernels for return values and save them for evlauating correctness
 
 #define INTFLOAT int
@@ -47,15 +53,15 @@ void biweight_h264_pixels16_8_c(uint8_t *__restrict__ _dst, uint8_t *__restrict_
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
         do {cycle_t begin, end, elapsed1, elapsed2;     \
-        begin = __builtin_ia32_rdtscp();                             \
+        begin = __builtin_readcyclecounter();                             \
         for (int i = 0; i < NUM_TESTS; i++)                               \
           FUNC_W_ARGS;                                                    \
-        end = __builtin_ia32_rdtscp();                               \
+        end = __builtin_readcyclecounter();                               \
         elapsed1 = end - begin;                                           \
-        begin = __builtin_ia32_rdtscp();                             \
+        begin = __builtin_readcyclecounter();                             \
         for (int i = 0; i < 2 * NUM_TESTS; i++)                           \
           FUNC_W_ARGS;                                                    \
-        end = __builtin_ia32_rdtscp();                               \
+        end = __builtin_readcyclecounter();                               \
         elapsed2 = end - begin;                                           \
         THROUGHPUT = (elapsed2 - elapsed1) / NUM_TESTS;           \
         }while(0)
