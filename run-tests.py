@@ -16,4 +16,4 @@ for _ in range(num_tests):
 
 print("Vectorized speedup")
 for name in kernels:
-    print(f"{name}: {statistics.median(non_vectorized_throughput[name])/statistics.median(vectorized_throughput[name])}")
+    print(f"{name}: {statistics.median(non_vectorized_throughput[name]) / statistics.median(vectorized_throughput[name])}")
