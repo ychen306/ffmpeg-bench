@@ -60,8 +60,8 @@ void ps_stereo_interpolate(INTFLOAT (*__restrict__ l)[2], INTFLOAT (*__restrict_
 
 // https://github.com/FFmpeg/FFmpeg/blob/94f2274a8b61438572f0873ccf430e55ce0e0e2b/libavcodec/aacpsdsp_template.c#L177
 
-void ps_stereo_interpolate_ipdopd(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
-                                           INTFLOAT h[2][4], INTFLOAT h_step[2][4],
+void ps_stereo_interpolate_ipdopd(INTFLOAT (*__restrict__ l)[2], INTFLOAT (*__restrict__ r)[2],
+                                           INTFLOAT h[__restrict__ 2][4], INTFLOAT h_step[__restrict__ 2][4],
                                            int len)
 {
     INTFLOAT h00  = h[0][0],      h10  = h[1][0];
