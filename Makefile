@@ -1,7 +1,7 @@
 MAKE := make
 .PHONY: all clean test run-tests
 
-CC := clang-18
+CC := gcc::
 all: bench bench.asan bench.novec
 test: all run-tests
 
@@ -59,25 +59,25 @@ bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asa
 ###### Non-Vectorized Build ######
 
 h264-idct.novec.o: h264-idct.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 lossless_audiodsp.novec.o: lossless_audiodsp.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 aacencdsp.novec.o: aacencdsp.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 aacpsdsp.novec.o: aacpsdsp.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 h264_dsp.novec.o: h264_dsp.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 h263dsp.novec.o: h263dsp.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 bench.novec.o: bench.c
-	$(CC) -O3 $^ -o $@ -c -fno-vectorize -fno-slp-vectorize
+	$(CC) -O3 $^ -o $@ -c -fno-tree-vectorize -fno-tree-slp-vectorize
 
 
 bench.novec: bench.novec.o h264-idct.novec.o lossless_audiodsp.novec.o aacencdsp.novec.o aacpsdsp.novec.o h264_dsp.novec.o h263dsp.novec.o
