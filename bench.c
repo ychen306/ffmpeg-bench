@@ -47,15 +47,15 @@ void biweight_h264_pixels16_8_c(uint8_t *__restrict__ _dst, uint8_t *__restrict_
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
         do {cycle_t begin, end, elapsed1, elapsed2;     \
-        begin = __rdtscp();                             \
+        begin = __builtin_ia32_rdtscp();                             \
         for (int i = 0; i < NUM_TESTS; i++)                               \
           FUNC_W_ARGS;                                                    \
-        end = __rdtscp();                               \
+        end = __builtin_ia32_rdtscp();                               \
         elapsed1 = end - begin;                                           \
-        begin = __rdtscp();                             \
+        begin = __builtin_ia32_rdtscp();                             \
         for (int i = 0; i < 2 * NUM_TESTS; i++)                           \
           FUNC_W_ARGS;                                                    \
-        end = __rdtscp();                               \
+        end = __builtin_ia32_rdtscp();                               \
         elapsed2 = end - begin;                                           \
         THROUGHPUT = (elapsed2 - elapsed1) / NUM_TESTS;           \
         }while(0)
