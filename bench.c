@@ -16,7 +16,8 @@
 #define UINTFLOAT unsigned
 
 // #define NUM_TESTS 100
-#define cycle_t unsigned long long
+// #define cycle_t unsigned long long
+#define cycle_t uint64_t
 
 int *rand_array(int size);
 
@@ -53,15 +54,15 @@ void biweight_h264_pixels16_8_c(uint8_t *__restrict__ _dst, uint8_t *__restrict_
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
         do {cycle_t begin, end, elapsed1, elapsed2;     \
-        begin = __builtin_readcyclecounter();                             \
+        begin = __rdtsc();                             \
         for (int i = 0; i < NUM_TESTS; i++)                               \
           FUNC_W_ARGS;                                                    \
-        end = __builtin_readcyclecounter();                               \
+        end = __rdtsc();                               \
         elapsed1 = end - begin;                                           \
-        begin = __builtin_readcyclecounter();                             \
+        begin = __rdtsc();                             \
         for (int i = 0; i < 2 * NUM_TESTS; i++)                           \
           FUNC_W_ARGS;                                                    \
-        end = __builtin_readcyclecounter();                               \
+        end = __rdtsc();                               \
         elapsed2 = end - begin;                                           \
         THROUGHPUT = (elapsed2 - elapsed1) / NUM_TESTS;           \
         }while(0)
@@ -82,7 +83,7 @@ cycle_t bench_ff_h264_idct_add() {
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 100, throughput);
   free(dst);
   free(block);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -98,7 +99,7 @@ cycle_t bench_scalarproduct_and_madd_int16() {
   free(v1);
   free(v2);
   free(v3);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -114,7 +115,7 @@ cycle_t bench_scalarproduct_and_madd_int32() {
   free(v1);
   free(v2);
   free(v3);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -140,7 +141,7 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   BENCH_FUNC(ff_h264_luma_dc_dequant_idct(output, input, qmul), 100, throughput);
   free(input);
-  printf("%llu ", throughput);
+  printf("%ld", throughput);
   return throughput;
 }
 
@@ -169,7 +170,7 @@ cycle_t bench_ps_stereo_interpolate() {
   // dont make len a random variable, set at certain value
 
   BENCH_FUNC(ps_stereo_interpolate(l, r, h, h_step, len), 100, throughput);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
 
   // llu is long long unsigned int
   
@@ -205,7 +206,7 @@ cycle_t bench_ps_stereo_interpolate_ipdopd() {
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
   BENCH_FUNC(ps_stereo_interpolate_ipdopd(l, r, h, h_step, len), 100, throughput);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
 
   free(l);
   free(r);
@@ -220,7 +221,7 @@ cycle_t bench_h263_h_loop_filter() {
   uint8_t *src = rand_array_u8(7*stride+4);
   BENCH_FUNC(h263_h_loop_filter(src + 2, stride, qscale), 100, throughput);
   free(src);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -231,7 +232,7 @@ cycle_t bench_h263_v_loop_filter() {
   uint8_t *src = rand_array_u8(3*stride + 8);
   BENCH_FUNC(h263_v_loop_filter(src + 2 * stride, stride, qscale), 100, throughput);
   free(src);
-  printf("%llu ", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -245,7 +246,7 @@ cycle_t bench_weight_h264_pixels16_8_c(){
   int offset = 4;
   BENCH_FUNC(weight_h264_pixels16_8_c(_block, stride, height, log2_denom, weight, offset), 100, throughput);
   free(_block);
-  printf("%llu", throughput);
+  printf("%ld", throughput);
   return throughput;
 }
 
