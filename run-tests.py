@@ -7,6 +7,7 @@ vectorized_throughput = {name: [] for name in kernels}
 non_vectorized_throughput = {name: [] for name in kernels}
 num_tests = 1000 #number of tests to be run
 for _ in range(num_tests):
+    #capturing values and saving to dictionary
     vec_val = [int(out) for out in subprocess.run("./bench", capture_output=True).stdout.split()]
     novec_val = [int(out) for out in subprocess.run("./bench.novec", capture_output=True).stdout.split()]
     for ind, name in enumerate(kernels):
