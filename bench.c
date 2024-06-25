@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include "random_ints_arrays.h"
 
 // check all original kernels for return values and save them for evlauating correctness
@@ -13,30 +14,35 @@
 
 int *rand_array(int size);
 
-void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride);
+void ff_h264_idct_add(uint8_t *__restrict__ _dst, int16_t *__restrict__ _block, int stride);
 
-int32_t scalarproduct_and_madd_int16(int16_t *v1, const int16_t *v2,
-                                              const int16_t *v3,
+int32_t scalarproduct_and_madd_int16(int16_t *__restrict__ v1, const int16_t *__restrict__ v2,
+                                              const int16_t *__restrict__ v3,
                                               int order, int mul);
 
-int32_t scalarproduct_and_madd_int32(int16_t *v1, const int32_t *v2,
-                                              const int16_t *v3,
+int32_t scalarproduct_and_madd_int32(int16_t *__restrict__ v1, const int32_t *__restrict__ v2,
+                                              const int16_t *__restrict__ v3,
                                               int order, int mul);
 void quantize_bands(int *out, const float *in, const float *scaled,
     int size, int is_signed, int maxval, const float Q34,
     const float rounding);
 
-void ff_h264_luma_dc_dequant_idct(int16_t *_output, int16_t *_input, int qmul);
+void ff_h264_luma_dc_dequant_idct(int16_t *__restrict__ _output, int16_t *__restrict__ _input, int qmul);
 
-void ps_stereo_interpolate(INTFLOAT (*l)[2], INTFLOAT (*r)[2],INTFLOAT h[2][4],
-    INTFLOAT h_step[2][4], int len);
+void ps_stereo_interpolate(INTFLOAT (*__restrict__ l)[2], INTFLOAT (*__restrict__ r)[2],INTFLOAT h[__restrict__ 2][4],
+    INTFLOAT h_step[__restrict__ 2][4], int len);
 
-void ps_stereo_interpolate_ipdopd(INTFLOAT (*l)[2], INTFLOAT (*r)[2],
-                                           INTFLOAT h[2][4], INTFLOAT h_step[2][4],
+void ps_stereo_interpolate_ipdopd(INTFLOAT (*__restrict__ l)[2], INTFLOAT (*__restrict__ r)[2],
+                                           INTFLOAT h[__restrict__ 2][4], INTFLOAT h_step[__restrict__ 2][4],
                                            int len);
 void h263_h_loop_filter(uint8_t *__restrict__ src, int stride, int qscale);
 
 void h263_v_loop_filter(uint8_t *__restrict__ src, int stride, int qscale);
+
+void weight_h264_pixels16_8_c(uint8_t *__restrict__ _block, ptrdiff_t stride, int height, int log2_denom, int weight, int offset);
+
+void biweight_h264_pixels16_8_c(uint8_t *__restrict__ _dst, uint8_t *__restrict__ _src, ptrdiff_t stride, int height,
+                                             int log2_denom, int weightd, int weights, int offset);
 
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
@@ -223,6 +229,19 @@ cycle_t bench_h263_v_loop_filter() {
   return throughput;
 }
 
+cycle_t bench_weight_h264_pixels16_8_c(){
+  srand(59);
+  uint8_t *block = rand_array_u8(16);
+  ptrdiff_t stride = 8;
+  int height = 8;
+  int log2_denom = 4;
+  int weight;
+  int offset = 4;
+  BENCH_FUNC(weight_h264_pixels16_8_c(block, stride, height, log2_denom, weight, offset), 100, throughput);
+  free(block);
+  printf("%llu", throughput);
+  return throughput;
+}
 
 
 
@@ -236,4 +255,5 @@ int main() {
   bench_ps_stereo_interpolate_ipdopd();
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();
+  bench_weight_h264_pixels16_8_c();
 }
