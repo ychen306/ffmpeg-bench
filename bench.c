@@ -141,7 +141,7 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   BENCH_FUNC(ff_h264_luma_dc_dequant_idct(output, input, qmul), 100, throughput);
   free(input);
-  printf("%ld", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
@@ -246,7 +246,7 @@ cycle_t bench_weight_h264_pixels16_8_c(){
   int offset = 4;
   BENCH_FUNC(weight_h264_pixels16_8_c(_block, stride, height, log2_denom, weight, offset), 100, throughput);
   free(_block);
-  printf("%ld", throughput);
+  printf("%ld ", throughput);
   return throughput;
 }
 
