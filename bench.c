@@ -250,7 +250,20 @@ cycle_t bench_weight_h264_pixels16_8_c(){
   return throughput;
 }
 
-
+cycle_t bench_biweight_h264_pixels16_8_c(){
+  srand(59);
+  uint8_t *_src = rand_array_u8(64);
+  uint8_t _dst[64];
+  ptrdiff_t stride = 16;
+  int height = 4;
+  int log2_denom = 4;
+  int weight = 8;
+  int offset = 4;
+  BENCH_FUNC(biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset), 100, throughput);
+  free(_src);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
 
 
@@ -265,4 +278,5 @@ int main() {
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();
   bench_weight_h264_pixels16_8_c();
+  bench_biweight_h264_pixels16_8_c();
 }
