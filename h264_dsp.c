@@ -93,6 +93,4 @@ void FUNCC(biweight_h264_pixels ## W)(uint8_t *__restrict__ _dst, uint8_t *__res
 }
 
 H264_WEIGHT(16)
-H264_WEIGHT(8)
-H264_WEIGHT(4)
-H264_WEIGHT(2)
+
