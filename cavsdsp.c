@@ -1,5 +1,14 @@
 #include <stddef.h>
 #include <stdint.h>
+
+static inline uint8_t av_clip_uint8(int x) {
+  if (x < 0)
+    return 0;
+  if (x > 255)
+    return 255;
+  return x;
+}
+
 void cavs_idct8_add_c(uint8_t *__restrict__ dst, int16_t *__restrict__ block, ptrdiff_t stride)
 {
     int i;
