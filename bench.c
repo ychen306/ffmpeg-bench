@@ -303,7 +303,7 @@ cycle_t bench_avg_h264_chroma_mc8(){
 
 cycle_t bench_cavs_idct8_add_c(){
   int stride = 4;
-  srand(42);
+  srand(71);
   uint8_t *dst = rand_array_8(4 * 4);
   int16_t *block = rand_array_16(4 * 4);
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
