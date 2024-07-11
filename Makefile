@@ -1,9 +1,10 @@
 MAKE := make
-.PHONY: all clean test run-tests
+.PHONY: all clean benchmark run-tests cpp_build acc-tests
 
-CC := clang
-all: bench bench.novec bench.asan
-test: all run-tests
+CC := clang-18
+all: bench bench.novec bench.asan test cpp_build
+all-tests: all run-tests
+SANITIZER := undefined
 
 h264-idct.o: h264-idct.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
@@ -29,40 +30,46 @@ cavsdsp.o: cavsdsp.c
 bench.o: bench.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
+test.o: test.c
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
 bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
 	h264_dsp.o h263dsp.o cavsdsp.o
-	$(CC) $^ -o $@
+	$(CC) $^ -o $@ $(EXTRA_FLAGS)
+
+test: test.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
+	h264_dsp.o h263dsp.o cavsdsp.o
+	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
 ########## ASAN build #######
 
 h264-idct.asan.o: h264-idct.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 lossless_audiodsp.asan.o: lossless_audiodsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 aacencdsp.asan.o: aacencdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 aacpsdsp.asan.o: aacpsdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 h264_dsp.asan.o: h264_dsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 h263dsp.asan.o: h263dsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 cavsdsp.asan.o: cavsdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 bench.asan.o: bench.c
-	cc -O0 $^ -o $@ -c -fsanitize=address -g
+	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o \
 				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o
-	cc -fsanitize=address $^ -o $@ -g
+	cc -fsanitize=$(SANITIZER) $^ -o $@ -g
 
 ###### Non-Vectorized Build ######
 
@@ -94,6 +101,18 @@ bench.novec.o: bench.c
 bench.novec: bench.novec.o h264-idct.novec.o lossless_audiodsp.novec.o aacencdsp.novec.o \
 				aacpsdsp.novec.o h264_dsp.novec.o h263dsp.novec.o cavsdsp.novec.o
 	$(CC) $^ -o $@
+
+cpp_build:
+	make -C cpp-build
+
+save_results:
+	make save_results -C cpp-build
+
+cpp_clean:
+	make clean -C cpp-build
+
+diff:
+	make diff -C cpp-build
 
 run-tests:
 	python3 run-tests.py
