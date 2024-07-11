@@ -40,10 +40,10 @@ test: test.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
 save_results:
-	../test > test_output_c.txt && ./test > test_output_cpp.txt
+	touch test_output_c.txt && touch test_output_cpp.txt && ../test > test_output_c.txt && ./test > test_output_cpp.txt
 
 diff:
-	diff -c test_output_c.txt test_output_cpp.txt
+	make save_results && diff -c test_output_c.txt test_output_cpp.txt
 
 clean:
 	rm -f *.o
