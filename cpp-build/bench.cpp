@@ -161,46 +161,7 @@ RAND_INT(64)
 
 
 
-// MY CODE
-// // still having issues with pointers and pointer conversion
-// cycle_t bench_ps_stereo_interpolate() {
-//   const int len = 42;
-//   srand(22);
-//   INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT *) * len);
-//   INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT *) * len);
-//   for (int i = 0; i < len; i++) {
-//     l[i] = rand_array(2);
-//     r[i] = rand_array(2);
-//   }
-
-//   // len arrays of size 2^^
-//   INTFLOAT (*h)[2][4] = rand_array(2 * 4);
-
-//   // then go thorugh and make each one their own random values
-//   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-//   // dont make len a random variable, set at certain value
-
-//   BENCH_FUNC(ps_stereo_interpolate(l, r, h, h_step, len), num_tests, throughput);
-//   printf("%ld ", throughput);
-
-//   // llu is long long unsigned int
-  
-//   //printf("%d \n", 9);
-//   //for (int i = 0; i<2; i++)
-//   //  printf("%d", *h[i]);
-
-//   // for (int i = 0; i < len; i++) {
-//   //   free(l[i]);
-//   //   free(r[i]);}
-//   free(l);
-//   free(r);
-
-//   free(h);
-//   // free(h_step);
-//   return throughput;
-// }
-
-// CHATGPT CODE
+// both working nicely now
 cycle_t bench_ps_stereo_interpolate() {
     const int len = 42;
     srand(22);
@@ -217,10 +178,6 @@ cycle_t bench_ps_stereo_interpolate() {
     BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
     printf("%ld ", throughput);
 
-    for (int i = 0; i < len; i++) {
-        free(l[i]);
-        free(r[i]);
-    }
     free(l);
     free(r);
     free(h);
@@ -228,31 +185,6 @@ cycle_t bench_ps_stereo_interpolate() {
 }
 
 
-// these two memory leak
-// MY CODE
-// cycle_t bench_ps_stereo_interpolate_ipdopd() {
-//   const int len = 42;
-//   srand(99);
-//   INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT *) * len);
-//   INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT *) * len);
-//   for (int i = 0; i < len; i++) {
-//     l[i] = rand_array(2);
-//     r[i] = rand_array(2);
-//   }
-
-//   INTFLOAT (*h)[2][4] = rand_array(2 * 4);
-
-//   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-
-//   BENCH_FUNC(ps_stereo_interpolate_ipdopd(l, r, h, h_step, len), num_tests, throughput);
-//   printf("%ld ", throughput);
-
-//   free(l);
-//   free(r);
-//   free(h);
-//   return throughput;
-// }
-//CHATGPT CODE
 cycle_t bench_ps_stereo_interpolate_ipdopd() {
     const int len = 42;
     srand(99);
@@ -269,10 +201,6 @@ cycle_t bench_ps_stereo_interpolate_ipdopd() {
     BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
     printf("%ld ", throughput);
 
-    for (int i = 0; i < len; i++) {
-        free(l[i]);
-        free(r[i]);
-    }
     free(l);
     free(r);
     free(h);

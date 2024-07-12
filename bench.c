@@ -174,10 +174,7 @@ cycle_t bench_ps_stereo_interpolate() {
   BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
   printf("%ld ", throughput);
 
-  for (int i = 0; i < len; i++) {
-      free(l[i]);
-      free(r[i]);
-  }
+  
   free(l);
   free(r);
   free(h);
@@ -201,10 +198,6 @@ cycle_t bench_ps_stereo_interpolate_ipdopd() {
   BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
   printf("%ld ", throughput);
 
-  for (int i = 0; i < len; i++) {
-      free(l[i]);
-      free(r[i]);
-  }
   free(l);
   free(r);
   free(h);
@@ -313,7 +306,7 @@ int main() {
   bench_h263_v_loop_filter();
   bench_weight_h264_pixels16_8_c();
   bench_biweight_h264_pixels16_8_c();
-  //bench_put_h264_chroma_mc8();
-  //bench_avg_h264_chroma_mc8();
+  bench_put_h264_chroma_mc8();
+  bench_avg_h264_chroma_mc8();
   bench_cavs_idct8_add_c();
 }
