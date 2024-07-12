@@ -2,7 +2,7 @@ MAKE := make
 .PHONY: all clean benchmark run-tests cpp_build acc-tests
 
 CC := clang-18
-all: bench bench.novec bench.asan test cpp_build
+all: bench bench.novec bench.asan test cpp_build test.asan
 all-tests: all run-tests
 SANITIZER := undefined
 
@@ -44,32 +44,39 @@ test: test.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
 ########## ASAN build #######
 
 h264-idct.asan.o: h264-idct.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 lossless_audiodsp.asan.o: lossless_audiodsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 aacencdsp.asan.o: aacencdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 aacpsdsp.asan.o: aacpsdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 h264_dsp.asan.o: h264_dsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 h263dsp.asan.o: h263dsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 cavsdsp.asan.o: cavsdsp.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 bench.asan.o: bench.c
-	cc -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+
+test.asan.o: test.c
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+
+test.asan: test.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o \
+				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o
+	$(CC) -fsanitize=$(SANITIZER) $^ -o $@ -g
 
 bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o \
 				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o
-	cc -fsanitize=$(SANITIZER) $^ -o $@ -g
+	$(CC) -fsanitize=$(SANITIZER) $^ -o $@ -g
 
 ###### Non-Vectorized Build ######
 
