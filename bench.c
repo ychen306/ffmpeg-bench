@@ -88,7 +88,7 @@ cycle_t bench_ff_h264_idct_add() {
   // set input size
   int stride = 4;
   srand(42);
-  uint8_t *dst[4 * 4];
+  uint8_t dst[4 * 4];
   int16_t *block = rand_array_16(4 * 4);
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
 
@@ -121,7 +121,7 @@ cycle_t bench_scalarproduct_and_madd_int32() {
   int16_t *v3 = rand_array_16(8);
   int order = 8;
   int mul = 2;
-  BENCH_FUNC(scalarproduct_and_madd_int16(v1, v2, v3, order, mul), num_tests, throughput);
+  BENCH_FUNC(scalarproduct_and_madd_int32(v1, v2, v3, order, mul), num_tests, throughput);
   free(v1);
   free(v2);
   free(v3);
@@ -158,66 +158,53 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
 RAND_INT(64)
 
 
-
-
-
-// still having issues with pointers and pointer conversion
 cycle_t bench_ps_stereo_interpolate() {
   const int len = 42;
   srand(22);
-  INTFLOAT (**l)[2] = malloc(sizeof(uintptr_t) * len);
-  INTFLOAT (**r)[2] = malloc(sizeof(uintptr_t) * len);
+  INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+  INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
   for (int i = 0; i < len; i++) {
-    l[i] = rand_array(2);
-    r[i] = rand_array(2);
+      l[i] = (INTFLOAT (*)[2]) rand_array(2);
+      r[i] = (INTFLOAT (*)[2]) rand_array(2);
   }
 
-  // len arrays of size 2^^
-  INTFLOAT (*h)[2][4] = rand_array(2 * 4);
-
-  // then go thorugh and make each one their own random values
+  INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-  // dont make len a random variable, set at certain value
 
-  BENCH_FUNC(ps_stereo_interpolate(l, r, h, h_step, len), num_tests, throughput);
+  BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
   printf("%ld ", throughput);
 
-  // llu is long long unsigned int
-  
-  //printf("%d \n", 9);
-  //for (int i = 0; i<2; i++)
-  //  printf("%d", *h[i]);
-
-  // for (int i = 0; i < len; i++) {
-  //   free(l[i]);
-  //   free(r[i]);}
+  for (int i = 0; i < len; i++) {
+      free(l[i]);
+      free(r[i]);
+  }
   free(l);
   free(r);
-
   free(h);
-  // free(h_step);
   return throughput;
 }
 
-// these two memory leak
 
 cycle_t bench_ps_stereo_interpolate_ipdopd() {
   const int len = 42;
   srand(99);
-  INTFLOAT (**l)[2] = malloc(sizeof(uintptr_t) * len);
-  INTFLOAT (**r)[2] = malloc(sizeof(uintptr_t) * len);
+  INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+  INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
   for (int i = 0; i < len; i++) {
-    l[i] = rand_array(2);
-    r[i] = rand_array(2);
+      l[i] = (INTFLOAT (*)[2]) rand_array(2);
+      r[i] = (INTFLOAT (*)[2]) rand_array(2);
   }
 
-  INTFLOAT (*h)[2][4] = rand_array(2 * 4);
-
+  INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
-  BENCH_FUNC(ps_stereo_interpolate_ipdopd(l, r, h, h_step, len), num_tests, throughput);
+  BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
   printf("%ld ", throughput);
 
+  for (int i = 0; i < len; i++) {
+      free(l[i]);
+      free(r[i]);
+  }
   free(l);
   free(r);
   free(h);
@@ -277,7 +264,7 @@ cycle_t bench_biweight_h264_pixels16_8_c(){
 
 cycle_t bench_put_h264_chroma_mc8(){
   srand(49);
-  const uint8_t *_src = rand_array_u8(64);
+  uint8_t *_src = rand_array_u8(64);
   int h = 8;
   ptrdiff_t stride = 8;
   uint8_t _dst[64];
@@ -291,7 +278,7 @@ cycle_t bench_put_h264_chroma_mc8(){
 
 cycle_t bench_avg_h264_chroma_mc8(){
   srand(38);
-  const uint8_t *_src = rand_array_u8(64);
+  uint8_t *_src = rand_array_u8(64);
   int h = 8;
   ptrdiff_t stride = 8;
   uint8_t _dst[64];
@@ -306,7 +293,7 @@ cycle_t bench_avg_h264_chroma_mc8(){
 cycle_t bench_cavs_idct8_add_c(){
   int stride = 4;
   srand(71);
-  uint8_t *dst = rand_array_8(4 * 4);
+  uint8_t *dst = rand_array_u8(4 * 4);
   int16_t *block = rand_array_16(4 * 4);
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
   free(dst);
