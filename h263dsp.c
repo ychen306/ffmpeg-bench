@@ -4,7 +4,7 @@
 
 #define FFABS(a) ((a) >= 0 ? (a) : (-(a)))
 
-int av_clip(int a, int amin, int amax){
+static inline int16_t av_clip(int16_t a, int16_t amin, int16_t amax){
     if (a < amin){
         return amin;
     } else if (a > amax) {
@@ -22,15 +22,15 @@ const uint8_t ff_h263_loop_filter_strength[32] = {
 void h263_h_loop_filter(uint8_t *__restrict__ src, int stride, int qscale)
 {
     int y;
-    const int strength = ff_h263_loop_filter_strength[qscale];
+    const int16_t strength = ff_h263_loop_filter_strength[qscale];
 
     for (y = 0; y < 8; y++) {
-        int d1, d2, ad1;
-        int p0 = src[y * stride - 2];
-        int p1 = src[y * stride - 1];
-        int p2 = src[y * stride + 0];
-        int p3 = src[y * stride + 1];
-        int d  = (p0 - p3 + 4 * (p2 - p1)) / 8;
+        int16_t d1, d2, ad1;
+        int16_t p0 = src[y * stride - 2];
+        int16_t p1 = src[y * stride - 1];
+        int16_t p2 = src[y * stride + 0];
+        int16_t p3 = src[y * stride + 1];
+        int16_t d  = (p0 - p3 + 4 * (p2 - p1)) / 8;
 
         if (d < -2 * strength)
             d1 = 0;
@@ -65,15 +65,15 @@ void h263_h_loop_filter(uint8_t *__restrict__ src, int stride, int qscale)
 void h263_v_loop_filter(uint8_t *__restrict__ src, int stride, int qscale)
 {
     int x;
-    const int strength = ff_h263_loop_filter_strength[qscale];
+    const int16_t strength = ff_h263_loop_filter_strength[qscale];
 
     for (x = 0; x < 8; x++) {
-        int d1, d2, ad1;
-        int p0 = src[x - 2 * stride];
-        int p1 = src[x - 1 * stride];
-        int p2 = src[x + 0 * stride];
-        int p3 = src[x + 1 * stride];
-        int d  = (p0 - p3 + 4 * (p2 - p1)) / 8;
+        int16_t d1, d2, ad1;
+        int16_t p0 = src[x - 2 * stride];
+        int16_t p1 = src[x - 1 * stride];
+        int16_t p2 = src[x + 0 * stride];
+        int16_t p3 = src[x + 1 * stride];
+        int16_t d  = (p0 - p3 + 4 * (p2 - p1)) / 8;
 
         if (d < -2 * strength)
             d1 = 0;

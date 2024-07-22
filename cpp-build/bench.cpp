@@ -94,6 +94,7 @@ cycle_t bench_ff_h264_idct_add() {
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
 
   free(block);
+  printf("1: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -110,6 +111,7 @@ cycle_t bench_scalarproduct_and_madd_int16() {
   free(v1);
   free(v2);
   free(v3);
+  printf("2: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -126,6 +128,7 @@ cycle_t bench_scalarproduct_and_madd_int32() {
   free(v1);
   free(v2);
   free(v3);
+  printf("3: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -152,6 +155,7 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
   int qmul = 16; // just chose a number
   BENCH_FUNC(ff_h264_luma_dc_dequant_idct(output, input, qmul), num_tests, throughput);
   free(input);
+  printf("4: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -162,6 +166,9 @@ RAND_INT(64)
 
 
 // both working nicely now
+// this stuff doesn't work
+
+
 cycle_t bench_ps_stereo_interpolate() {
     const int len = 42;
     srand(22);
@@ -176,6 +183,7 @@ cycle_t bench_ps_stereo_interpolate() {
     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
     BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
+    printf("5: ");
     printf("%ld ", throughput);
 
     free(l);
@@ -199,6 +207,7 @@ cycle_t bench_ps_stereo_interpolate_ipdopd() {
     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
     BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
+    printf("6: ");
     printf("%ld ", throughput);
 
     free(l);
@@ -215,6 +224,7 @@ cycle_t bench_h263_h_loop_filter() {
   uint8_t *src = rand_array_u8(7*stride+4);
   BENCH_FUNC(h263_h_loop_filter(src + 2, stride, qscale), num_tests, throughput);
   free(src);
+  printf("7: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -226,6 +236,7 @@ cycle_t bench_h263_v_loop_filter() {
   uint8_t *src = rand_array_u8(3*stride + 8);
   BENCH_FUNC(h263_v_loop_filter(src + 2 * stride, stride, qscale), num_tests, throughput);
   free(src);
+  printf("8: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -240,6 +251,7 @@ cycle_t bench_weight_h264_pixels16_8_c(){
   int offset = 4;
   BENCH_FUNC(weight_h264_pixels16_8_c(block, stride, height, log2_denom, weight, offset), num_tests, throughput);
   free(block);
+  printf("9: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -255,6 +267,7 @@ cycle_t bench_biweight_h264_pixels16_8_c(){
   int offset = 4;
   BENCH_FUNC(biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset), num_tests, throughput);
   free(_src);
+  printf("10: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -269,6 +282,7 @@ cycle_t bench_put_h264_chroma_mc8(){
   int y = 4;
   BENCH_FUNC(put_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
   free(_src);
+  printf("11: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -283,6 +297,7 @@ cycle_t bench_avg_h264_chroma_mc8(){
   int y = 4;
   BENCH_FUNC(avg_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
   free(_src);
+  printf("12: ");
   printf("%ld ", throughput);
   return throughput;
 }
@@ -295,14 +310,15 @@ cycle_t bench_cavs_idct8_add_c(){
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
   free(dst);
   free(block);
+  printf("13: ");
   printf("%ld ", throughput);
   return throughput;
 }
 
 int main() {
+  bench_ff_h264_idct_add();
   bench_scalarproduct_and_madd_int16();
   bench_scalarproduct_and_madd_int32();
-  bench_ff_h264_idct_add();
   bench_ff_h264_luma_dc_dequant_idct();
   bench_ps_stereo_interpolate();
   bench_ps_stereo_interpolate_ipdopd();

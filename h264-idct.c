@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define SUINT int
+#define SUINT int16_t
 
 __attribute__((always_inline))  
 static uint8_t av_clip_pixel(int x) {
@@ -57,16 +57,16 @@ void ff_h264_idct_add(uint8_t *__restrict__ _dst, int16_t *__restrict__ _block, 
 void ff_h264_luma_dc_dequant_idct(int16_t *__restrict__ _output, int16_t *__restrict__ _input, int qmul){
 #define stride 16
     int i;
-    int temp[16];
+    int16_t temp[16];
     static const uint8_t x_offset[4]={0, 2*stride, 8*stride, 10*stride};
     dctcoef *input = (dctcoef*)_input;
     dctcoef *output = (dctcoef*)_output;
 
     for(i=0; i<4; i++){
-        const int z0= input[4*i+0] + input[4*i+1];
-        const int z1= input[4*i+0] - input[4*i+1];
-        const int z2= input[4*i+2] - input[4*i+3];
-        const int z3= input[4*i+2] + input[4*i+3];
+        const int16_t z0= input[4*i+0] + input[4*i+1];
+        const int16_t z1= input[4*i+0] - input[4*i+1];
+        const int16_t z2= input[4*i+2] - input[4*i+3];
+        const int16_t z3= input[4*i+2] + input[4*i+3];
 
         temp[4*i+0]= z0+z3;
         temp[4*i+1]= z0-z3;
@@ -81,10 +81,10 @@ void ff_h264_luma_dc_dequant_idct(int16_t *__restrict__ _output, int16_t *__rest
         const SUINT z2= temp[4*1+i] - temp[4*3+i];
         const SUINT z3= temp[4*1+i] + temp[4*3+i];
 
-        output[stride* 0+offset]= (int)((z0 + z3)*qmul + 128 ) >> 8;
-        output[stride* 1+offset]= (int)((z1 + z2)*qmul + 128 ) >> 8;
-        output[stride* 4+offset]= (int)((z1 - z2)*qmul + 128 ) >> 8;
-        output[stride* 5+offset]= (int)((z0 - z3)*qmul + 128 ) >> 8;
+        output[stride* 0+offset]= (int16_t)((z0 + z3)*qmul + 128 ) >> 8;
+        output[stride* 1+offset]= (int16_t)((z1 + z2)*qmul + 128 ) >> 8;
+        output[stride* 4+offset]= (int16_t)((z1 - z2)*qmul + 128 ) >> 8;
+        output[stride* 5+offset]= (int16_t)((z0 - z3)*qmul + 128 ) >> 8;
     }
 #undef stride
 }
