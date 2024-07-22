@@ -20,7 +20,7 @@ void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride){
    	block[0] += 1 << 5;
 
 	with_threads(i, 4, 4){
-		vegen::block<int, 16> int_block;
+		vegen::block<int16_t, 16> int_block;
 		const SUINT z0=  block[i + 4*0]     +  (uint16_t)block[i + 4*2];
         const SUINT z1=  block[i + 4*0]     -  (uint16_t)block[i + 4*2];
         const SUINT z2= (block[i + 4*1]>>1) -  (uint16_t)block[i + 4*3];
@@ -55,7 +55,7 @@ void ff_h264_luma_dc_dequant_idct(int16_t *_output, int16_t *_input,int qmul){
     dctcoef *output = (dctcoef*)_output;
 
 	with_threads(i, 4, 4){
-		vegen::block<int, 16> temp;
+		vegen::block<int16_t, 16> temp;
 
 		const int16_t z0= input[4*i+0] + input[4*i+1];
         const int16_t z1= input[4*i+0] - input[4*i+1];
