@@ -58,7 +58,7 @@ void h263_v_loop_filter(uint8_t * src, int stride, int qscale);
 
 // void put_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
 
-// void cavs_idct8_add_c(uint8_t * dst, int16_t * block, ptrdiff_t stride);
+void cavs_idct8_add_c(uint8_t * dst, int16_t * block, ptrdiff_t stride);
 
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
@@ -298,18 +298,17 @@ cycle_t bench_h263_v_loop_filter() {
 //   return throughput;
 // }
 
-// cycle_t bench_cavs_idct8_add_c(){
-//   int stride = 4;
-//   srand(71);
-//   uint8_t *dst = rand_array_u8(4 * 4);
-//   int16_t *block = rand_array_16(4 * 4);
-//   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
-//   free(dst);
-//   free(block);
-//   printf("13: ");
-//   printf("%ld ", throughput);
-//   return throughput;
-// }
+cycle_t bench_cavs_idct8_add_c(){
+  int stride = 4;
+  srand(71);
+  uint8_t *dst = rand_array_u8(4 * 4);
+  int16_t *block = rand_array_16(4 * 4);
+  BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
+  free(dst);
+  free(block);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
 int main() {
   bench_ff_h264_idct_add();
@@ -324,5 +323,5 @@ int main() {
   // bench_biweight_h264_pixels16_8_c();
   // bench_put_h264_chroma_mc8();
   // bench_avg_h264_chroma_mc8();
-  // bench_cavs_idct8_add_c();
+  bench_cavs_idct8_add_c();
 }
