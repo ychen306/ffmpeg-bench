@@ -1,0 +1,18 @@
+#ignoring all object files and llvm assembly file
+*.o
+*.ll
+
+#ignoring bench and test targets
+bench
+bench.asan
+bench.novec
+**/bench
+**/bench.vg
+test
+test.asan
+**/test
+
+#random files
+problem.patch
+test_output_c.txt
+test_output_cpp.txt
