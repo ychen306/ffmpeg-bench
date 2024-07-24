@@ -4,7 +4,7 @@
 #define SUINT int16_t
 #define pixel uint8_t
 #define dctcoef int16_t
-static inline uint8_t av_clip_pixel(int x) {
+static inline uint8_t av_clip_pixel(int16_t x) {
   if (x < 0)
     return 0;
   if (x > 255)
@@ -22,9 +22,9 @@ void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride){
 	with_threads(i, 4, 4){
 		vegen::block<int16_t, 16> int_block;
 		const SUINT z0=  block[i + 4*0]     +  (uint16_t)block[i + 4*2];
-        const SUINT z1=  block[i + 4*0]     -  (uint16_t)block[i + 4*2];
-        const SUINT z2= (block[i + 4*1]>>1) -  (uint16_t)block[i + 4*3];
-        const SUINT z3=  block[i + 4*1]     + (uint16_t)(block[i + 4*3]>>1);
+    const SUINT z1=  block[i + 4*0]     -  (uint16_t)block[i + 4*2];
+    const SUINT z2= (block[i + 4*1]>>1) -  (uint16_t)block[i + 4*3];
+    const SUINT z3=  block[i + 4*1]     + (uint16_t)(block[i + 4*3]>>1);
 
 		block[i + 4*0] = int_block(i + 4*0)= z0 + z3;
 		block[i + 4*1] = int_block(i + 4*1)= z1 + z2;
@@ -34,14 +34,14 @@ void ff_h264_idct_add(uint8_t *_dst, int16_t *_block, int stride){
 		vegen::sync();
 
 		const SUINT z4=  int_block(0 + 4*i)     +  (SUINT)int_block(2 + 4*i);
-        const SUINT z5=  int_block(0 + 4*i)     -  (SUINT)int_block(2 + 4*i);
-        const SUINT z6= (int_block(1 + 4*i)>>1) -  (SUINT)int_block(3 + 4*i);
-	    const SUINT z7=  int_block(1 + 4*i)     + (SUINT)(int_block(3 + 4*i)>>1);
+    const SUINT z5=  int_block(0 + 4*i)     -  (SUINT)int_block(2 + 4*i);
+    const SUINT z6= (int_block(1 + 4*i)>>1) -  (SUINT)int_block(3 + 4*i);
+	  const SUINT z7=  int_block(1 + 4*i)     + (SUINT)(int_block(3 + 4*i)>>1);
 
-		dst[i + 0*stride]= av_clip_pixel(dst[i + 0*stride] + ((int)(z4 + z7) >> 6));
-		dst[i + 1*stride]= av_clip_pixel(dst[i + 1*stride] + ((int)(z5 + z6) >> 6));
-		dst[i + 2*stride]= av_clip_pixel(dst[i + 2*stride] + ((int)(z5 - z6) >> 6));
-		dst[i + 3*stride]= av_clip_pixel(dst[i + 3*stride] + ((int)(z4 - z7) >> 6));
+		dst[i + 0*stride]= av_clip_pixel(dst[i + 0*stride] + ((int16_t)(z4 + z7) >> 6));
+		dst[i + 1*stride]= av_clip_pixel(dst[i + 1*stride] + ((int16_t)(z5 + z6) >> 6));
+		dst[i + 2*stride]= av_clip_pixel(dst[i + 2*stride] + ((int16_t)(z5 - z6) >> 6));
+		dst[i + 3*stride]= av_clip_pixel(dst[i + 3*stride] + ((int16_t)(z4 - z7) >> 6));
 
 	}
 }
