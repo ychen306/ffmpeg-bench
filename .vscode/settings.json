@@ -9,6 +9,7 @@
         "initializer_list": "c",
         "stdio.h": "c",
         "stdint.h": "c",
-        "utility": "cpp"
+        "utility": "cpp",
+        "random": "c"
     }
 }

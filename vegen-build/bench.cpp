@@ -49,7 +49,7 @@ void h263_h_loop_filter(uint8_t * src, int stride, int qscale);
 
 void h263_v_loop_filter(uint8_t * src, int stride, int qscale);
 
-// void weight_h264_pixels16_8_c(uint8_t * _block, ptrdiff_t stride, int height, int log2_denom, int weight, int offset);
+void weight_h264_pixels16_8_c(uint8_t * _block, ptrdiff_t stride, int height, int log2_denom, int weight, int offset);
 
 // void biweight_h264_pixels16_8_c(uint8_t * _dst, uint8_t * _src, ptrdiff_t stride, int height,
 //                                              int log2_denom, int weightd, int weights, int offset);
@@ -237,20 +237,19 @@ cycle_t bench_h263_v_loop_filter() {
   return throughput;
 }
 
-// cycle_t bench_weight_h264_pixels16_8_c(){
-//   srand(59);
-//   uint8_t *block = rand_array_u8(64);
-//   ptrdiff_t stride = 16;
-//   int height = 4;
-//   int log2_denom = 4;
-//   int weight = 8;
-//   int offset = 4;
-//   BENCH_FUNC(weight_h264_pixels16_8_c(block, stride, height, log2_denom, weight, offset), num_tests, throughput);
-//   free(block);
-//   printf("9: ");
-//   printf("%ld ", throughput);
-//   return throughput;
-// }
+cycle_t bench_weight_h264_pixels16_8_c(){
+  srand(59);
+  uint8_t *block = rand_array_u8(64);
+  ptrdiff_t stride = 16;
+  int height = 4;
+  int log2_denom = 4;
+  int weight = 8;
+  int offset = 4;
+  BENCH_FUNC(weight_h264_pixels16_8_c(block, stride, height, log2_denom, weight, offset), num_tests, throughput);
+  free(block);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
 // cycle_t bench_biweight_h264_pixels16_8_c(){
 //   srand(59);
@@ -319,7 +318,7 @@ int main() {
   // bench_ps_stereo_interpolate_ipdopd();
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();
-  // bench_weight_h264_pixels16_8_c();
+  bench_weight_h264_pixels16_8_c();
   // bench_biweight_h264_pixels16_8_c();
   // bench_put_h264_chroma_mc8();
   // bench_avg_h264_chroma_mc8();

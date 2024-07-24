@@ -3,11 +3,10 @@
 *.ll
 
 #ignoring bench and test targets
-bench
-bench.asan
 bench.novec
 **/bench
 **/bench.vg
+**/bench.asan
 test
 test.asan
 **/test
