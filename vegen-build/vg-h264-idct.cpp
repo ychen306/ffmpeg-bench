@@ -57,28 +57,28 @@ void ff_h264_luma_dc_dequant_idct(int16_t *_output, int16_t *_input,int qmul){
 	with_threads(i, 4, 4){
 		vegen::block<int16_t, 16> temp;
 
-		const int16_t z0= input[4*i+0] + input[4*i+1];
-        const int16_t z1= input[4*i+0] - input[4*i+1];
-        const int16_t z2= input[4*i+2] - input[4*i+3];
-        const int16_t z3= input[4*i+2] + input[4*i+3];
+		  const int16_t z0= input[4*i+0] + input[4*i+1];
+      const int16_t z1= input[4*i+0] - input[4*i+1];
+      const int16_t z2= input[4*i+2] - input[4*i+3];
+      const int16_t z3= input[4*i+2] + input[4*i+3];
 
-        temp(4*i+0)= z0+z3;
-        temp(4*i+1)= z0-z3;
-        temp(4*i+2)= z1-z2;
-        temp(4*i+3)= z1+z2;
+      temp(4*i+0)= z0+z3;
+      temp(4*i+1)= z0-z3;
+      temp(4*i+2)= z1-z2;
+      temp(4*i+3)= z1+z2;
 
 		vegen::sync();
 
-		const int16_t offset= x_offset[i];
-        const SUINT z4= temp(4*0+i) + temp(4*2+i);
-        const SUINT z5= temp(4*0+i) - temp(4*2+i);
-        const SUINT z6= temp(4*1+i) - temp(4*3+i);
-        const SUINT z7= temp(4*1+i) + temp(4*3+i);
+		  const int16_t offset= x_offset[i];
+      const SUINT z4= temp(4*0+i) + temp(4*2+i);
+      const SUINT z5= temp(4*0+i) - temp(4*2+i);
+      const SUINT z6= temp(4*1+i) - temp(4*3+i);
+      const SUINT z7= temp(4*1+i) + temp(4*3+i);
 
-		output[stride* 0+offset]= (int16_t)((z4 + z7)*qmul + 128 ) >> 8;
-        output[stride* 1+offset]= (int16_t)((z5 + z6)*qmul + 128 ) >> 8;
-        output[stride* 4+offset]= (int16_t)((z5 - z6)*qmul + 128 ) >> 8;
-        output[stride* 5+offset]= (int16_t)((z4 - z7)*qmul + 128 ) >> 8;
+		  output[stride* 0+offset]= (int16_t)((z4 + z7)*qmul + 128 ) >> 8;
+      output[stride* 1+offset]= (int16_t)((z5 + z6)*qmul + 128 ) >> 8;
+      output[stride* 4+offset]= (int16_t)((z5 - z6)*qmul + 128 ) >> 8;
+      output[stride* 5+offset]= (int16_t)((z4 - z7)*qmul + 128 ) >> 8;
 	}
 #undef stride
 }

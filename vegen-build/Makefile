@@ -2,7 +2,7 @@ MAKE := make
 .PHONY: all clean # save_results diff
 
 CC := vegen-clang++
-all: bench.vg # test
+all: bench.vg test
 
 h264-idct.o: vg-h264-idct.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
@@ -28,19 +28,19 @@ cavsdsp.o: vg-cavsdsp.cpp
 bench.o: bench.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
-# test.o: test.cpp
-# 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
+test.o: test.cpp
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
 bench.vg: bench.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o # lossless_audiodsp.o aacencdsp.o \
 	aacpsdsp.o   
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
-# test: test.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
-# 	h264_dsp.o h263dsp.o cavsdsp.o
-# 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
+test: test.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o # lossless_audiodsp.o aacencdsp.o \
+	aacpsdsp.o
+	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
-# save_results:
-# 	touch test_output_c.txt && touch test_output_cpp.txt && ../test > test_output_c.txt && ./test > test_output_cpp.txt
+save_results:
+	touch test_output_c.txt && touch test_output_cpp.txt && ../test > test_output_c.txt && ./test > test_output_cpp.txt
 
 # diff:
 # 	make save_results && diff -c test_output_c.txt test_output_cpp.txt
