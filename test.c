@@ -185,7 +185,7 @@ void test_h263_h_loop_filter() {
     const int stride = 3;
     const int qscale = 24;
     uint8_t *src = rand_array_u8(7*stride+4);
-    h263_h_loop_filter(src, stride, qscale);
+    h263_h_loop_filter(src + 2, stride, qscale);
     for(int i = 0; i< (7*stride+4); i++){
         printf("%" PRIu8 " ", src[i]);
     }
@@ -198,12 +198,12 @@ void test_h263_v_loop_filter(){
     const int stride = 3;
     const int qscale = 24;
     uint8_t *src = rand_array_u8(3*stride + 8);
-    h263_v_loop_filter(src, stride, qscale);
+    h263_v_loop_filter(src + 2 * stride, stride, qscale);
     for(int i=0; i < (3*stride + 8); i++){
         printf("%" PRIu8 " ", src[i]);
     }
     printf("\n \n");
-    // for some reason throws error when you use free here, everything works fine without using a free
+    free(src);
 }
 
 void test_weight_h264_pixels16_8_c(){
@@ -274,8 +274,8 @@ void test_weight_h264_pixels16_8_c(){
 void test_cavs_idct8_add_c(){
     int stride = 4;
     srand(71);
-    uint8_t dst[16] = { 0 };
-    int16_t *block = rand_array_16(4 * 4);
+    uint8_t dst[64] = { 0 };
+    int16_t *block = rand_array_16(64);
     cavs_idct8_add_c(dst, block, stride);
     for(int i = 0; i<16; i++){
         printf("%" PRIu8 " ", dst[i]);

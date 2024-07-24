@@ -13,5 +13,5 @@ test.asan
 
 #random files
 problem.patch
-test_output_c.txt
-test_output_cpp.txt
+**/test_output_c.txt
+**/test_output_cpp.txt

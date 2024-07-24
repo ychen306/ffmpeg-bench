@@ -4,7 +4,7 @@ MAKE := make
 CC := clang-18
 all: bench bench.novec bench.asan test cpp_build test.asan
 all-tests: all run-tests
-SANITIZER := undefined
+SANITIZER := address
 
 h264-idct.o: h264-idct.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
