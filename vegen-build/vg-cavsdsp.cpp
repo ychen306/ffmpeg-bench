@@ -17,7 +17,7 @@ void cavs_idct8_add_c(uint8_t * dst, int16_t * block, ptrdiff_t stride)
     src[0][0] += 8;
 
     with_threads(i, 8, 8){
-        vegen::block<int, 8, 8> temp;
+        vegen::block<int16_t, 8, 8> temp;
         const int a0 = 3 * src[i][1] - 2 * src[i][7];
         const int a1 = 3 * src[i][3] + 2 * src[i][5];
         const int a2 = 2 * src[i][3] - 3 * src[i][5];

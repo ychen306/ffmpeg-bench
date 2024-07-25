@@ -4,7 +4,7 @@
 #define SUINT int16_t
 
 __attribute__((always_inline))  
-static uint8_t av_clip_pixel(int x) {
+static uint8_t av_clip_pixel(int16_t x) {
   if (x < 0)
     return 0;
   if (x > 255)
@@ -43,10 +43,10 @@ void ff_h264_idct_add(uint8_t *__restrict__ _dst, int16_t *__restrict__ _block, 
         const SUINT z2= (block[1 + 4*i]>>1) -  (SUINT)block[3 + 4*i];
         const SUINT z3=  block[1 + 4*i]     + (SUINT)(block[3 + 4*i]>>1);
 
-        dst[i + 0*stride]= av_clip_pixel(dst[i + 0*stride] + ((int)(z0 + z3) >> 6));
-        dst[i + 1*stride]= av_clip_pixel(dst[i + 1*stride] + ((int)(z1 + z2) >> 6));
-        dst[i + 2*stride]= av_clip_pixel(dst[i + 2*stride] + ((int)(z1 - z2) >> 6));
-        dst[i + 3*stride]= av_clip_pixel(dst[i + 3*stride] + ((int)(z0 - z3) >> 6));
+        dst[i + 0*stride]= av_clip_pixel(dst[i + 0*stride] + ((int16_t)(z0 + z3) >> 6));
+        dst[i + 1*stride]= av_clip_pixel(dst[i + 1*stride] + ((int16_t)(z1 + z2) >> 6));
+        dst[i + 2*stride]= av_clip_pixel(dst[i + 2*stride] + ((int16_t)(z1 - z2) >> 6));
+        dst[i + 3*stride]= av_clip_pixel(dst[i + 3*stride] + ((int16_t)(z0 - z3) >> 6));
     }
 
     memset(block, 0, 16 * sizeof(dctcoef));
