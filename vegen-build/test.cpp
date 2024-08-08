@@ -51,12 +51,12 @@ void h263_v_loop_filter(uint8_t *src, int stride, int qscale);
 
 void weight_h264_pixels16_8_c(uint8_t *_block, ptrdiff_t stride, int height, int log2_denom, int weight, int offset);
 
-// void biweight_h264_pixels16_8_c(uint8_t *_dst, uint8_t *_src, ptrdiff_t stride, int height,
-//                                              int log2_denom, int weightd, int weights, int offset);
+void biweight_h264_pixels16_8_c(uint8_t *_dst, uint8_t *_src, ptrdiff_t stride, int height,
+                                             int log2_denom, int weightd, int weights, int offset);
 
-// void avg_h264_chroma_mc8(uint8_t *_dst /*align 8*/, const uint8_t *_src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
+void avg_h264_chroma_mc8(uint8_t *_dst /*align 8*/, const uint8_t *_src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
 
-// void put_h264_chroma_mc8(uint8_t *_dst /*align 8*/, const uint8_t *_src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
+void put_h264_chroma_mc8(uint8_t *_dst /*align 8*/, const uint8_t *_src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
 
 void cavs_idct8_add_c(uint8_t *dst, int16_t *block, ptrdiff_t stride);
 
@@ -222,54 +222,54 @@ void test_weight_h264_pixels16_8_c(){
   free(block);
 }
 
-// void test_biweight_h264_pixels16_8_c(){
-//     srand(59);
-//     uint8_t *_src = rand_array_u8(64);
-//     uint8_t _dst[64] = { 0 };
-//     ptrdiff_t stride = 16;
-//     int height = 4;
-//     int log2_denom = 4;
-//     int weight = 8;
-//     int offset = 4;
-//     biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset);
-//     for(int i = 0; i<64; i++){
-//         printf("%" PRIu8 " ", _dst[i]);
-//     }
-//     printf("\n \n");
-//     free(_src);
-// }
+void test_biweight_h264_pixels16_8_c(){
+    srand(59);
+    uint8_t *_src = rand_array_u8(64);
+    uint8_t _dst[64] = { 0 };
+    ptrdiff_t stride = 16;
+    int height = 4;
+    int log2_denom = 4;
+    int weight = 8;
+    int offset = 4;
+    biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset);
+    for(int i = 0; i<64; i++){
+        printf("%" PRIu8 " ", _dst[i]);
+    }
+    printf("\n \n");
+    free(_src);
+}
 
-// void test_put_h264_chroma_mc8(){
-//     srand(49);
-//     uint8_t *_src = rand_array_u8(64);
-//     int h = 8;
-//     ptrdiff_t stride = 8;
-//     uint8_t _dst[64] = { 0 };
-//     int x = 2;
-//     int y = 4;
-//     put_h264_chroma_mc8(_dst, _src, stride, h, x, y);
-//     for(int i = 0; i<64; i++){
-//         printf("%" PRIu8 " ", _dst[i]);
-//     }
-//     printf("\n \n");
-//     free(_src);
-// }
+void test_put_h264_chroma_mc8(){
+    srand(49);
+    uint8_t *_src = rand_array_u8(64);
+    int h = 8;
+    ptrdiff_t stride = 8;
+    uint8_t _dst[64] = { 0 };
+    int x = 2;
+    int y = 4;
+    put_h264_chroma_mc8(_dst, _src, stride, h, x, y);
+    for(int i = 0; i<64; i++){
+        printf("%" PRIu8 " ", _dst[i]);
+    }
+    printf("\n \n");
+    free(_src);
+}
 
-// void test_avg_h264_chroma_mc8(){
-//     srand(38);
-//     uint8_t *_src = rand_array_u8(64);
-//     int h = 8;
-//     ptrdiff_t stride = 8;
-//     uint8_t _dst[64] = { 0 };
-//     int x = 2;
-//     int y = 4;
-//     avg_h264_chroma_mc8(_dst, _src, stride, h, x, y);
-//     for(int i = 0; i<64; i++){
-//         printf("%" PRIu8 " ", _dst[i]);
-//     }
-//     printf("\n \n");
-//     free(_src);
-// }
+void test_avg_h264_chroma_mc8(){
+    srand(38);
+    uint8_t *_src = rand_array_u8(64);
+    int h = 8;
+    ptrdiff_t stride = 8;
+    uint8_t _dst[64] = { 0 };
+    int x = 2;
+    int y = 4;
+    avg_h264_chroma_mc8(_dst, _src, stride, h, x, y);
+    for(int i = 0; i<64; i++){
+        printf("%" PRIu8 " ", _dst[i]);
+    }
+    printf("\n \n");
+    free(_src);
+}
 
 void test_cavs_idct8_add_c(){
     int stride = 8;

@@ -51,12 +51,12 @@ void h263_v_loop_filter(uint8_t * src, int stride, int qscale);
 
 void weight_h264_pixels16_8_c(uint8_t * _block, ptrdiff_t stride, int height, int log2_denom, int weight, int offset);
 
-// void biweight_h264_pixels16_8_c(uint8_t * _dst, uint8_t * _src, ptrdiff_t stride, int height,
-//                                              int log2_denom, int weightd, int weights, int offset);
+void biweight_h264_pixels16_8_c(uint8_t * _dst, uint8_t * _src, ptrdiff_t stride, int height,
+                                             int log2_denom, int weightd, int weights, int offset);
 
-// void avg_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
+void avg_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
 
-// void put_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
+void put_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*align 1*/, ptrdiff_t stride, int h, int x, int y);
 
 void cavs_idct8_add_c(uint8_t * dst, int16_t * block, ptrdiff_t stride);
 
@@ -251,51 +251,48 @@ cycle_t bench_weight_h264_pixels16_8_c(){
   return throughput;
 }
 
-// cycle_t bench_biweight_h264_pixels16_8_c(){
-//   srand(59);
-//   uint8_t *_src = rand_array_u8(64);
-//   uint8_t _dst[64];
-//   ptrdiff_t stride = 16;
-//   int height = 4;
-//   int log2_denom = 4;
-//   int weight = 8;
-//   int offset = 4;
-//   BENCH_FUNC(biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset), num_tests, throughput);
-//   free(_src);
-//   printf("10: ");
-//   printf("%ld ", throughput);
-//   return throughput;
-// }
+cycle_t bench_biweight_h264_pixels16_8_c(){
+  srand(59);
+  uint8_t *_src = rand_array_u8(64);
+  uint8_t _dst[64];
+  ptrdiff_t stride = 16;
+  int height = 4;
+  int log2_denom = 4;
+  int weight = 8;
+  int offset = 4;
+  BENCH_FUNC(biweight_h264_pixels16_8_c(_dst, _src, stride, height, log2_denom, weight, weight, offset), num_tests, throughput);
+  free(_src);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
-// cycle_t bench_put_h264_chroma_mc8(){
-//   srand(49);
-//   uint8_t *_src = rand_array_u8(64);
-//   int h = 8;
-//   ptrdiff_t stride = 8;
-//   uint8_t _dst[64];
-//   int x = 2;
-//   int y = 4;
-//   BENCH_FUNC(put_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
-//   free(_src);
-//   printf("11: ");
-//   printf("%ld ", throughput);
-//   return throughput;
-// }
+cycle_t bench_put_h264_chroma_mc8(){
+  srand(49);
+  uint8_t *_src = rand_array_u8(64);
+  int h = 8;
+  ptrdiff_t stride = 8;
+  uint8_t _dst[64];
+  int x = 2;
+  int y = 4;
+  BENCH_FUNC(put_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
+  free(_src);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
-// cycle_t bench_avg_h264_chroma_mc8(){
-//   srand(38);
-//   uint8_t *_src = rand_array_u8(64);
-//   int h = 8;
-//   ptrdiff_t stride = 8;
-//   uint8_t _dst[64];
-//   int x = 2;
-//   int y = 4;
-//   BENCH_FUNC(avg_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
-//   free(_src);
-//   printf("12: ");
-//   printf("%ld ", throughput);
-//   return throughput;
-// }
+cycle_t bench_avg_h264_chroma_mc8(){
+  srand(38);
+  uint8_t *_src = rand_array_u8(64);
+  int h = 8;
+  ptrdiff_t stride = 8;
+  uint8_t _dst[64];
+  int x = 2;
+  int y = 4;
+  BENCH_FUNC(avg_h264_chroma_mc8(_dst, _src, stride, h, x, y), num_tests, throughput);
+  free(_src);
+  printf("%ld ", throughput);
+  return throughput;
+}
 
 cycle_t bench_cavs_idct8_add_c(){
   int stride = 8;
@@ -319,8 +316,8 @@ int main() {
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();
   bench_weight_h264_pixels16_8_c();
-  // bench_biweight_h264_pixels16_8_c();
-  // bench_put_h264_chroma_mc8();
-  // bench_avg_h264_chroma_mc8();
+  bench_biweight_h264_pixels16_8_c();
+  bench_put_h264_chroma_mc8();
+  bench_avg_h264_chroma_mc8();
   bench_cavs_idct8_add_c();
 }
