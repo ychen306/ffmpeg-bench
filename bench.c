@@ -171,7 +171,7 @@ cycle_t bench_ps_stereo_interpolate() {
   INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
   INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
-  BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
+  BENCH_FUNC(ps_stereo_interpolate((INTFLOAT(*)[2])l, (INTFLOAT(*)[2])r, *h, h_step, len), num_tests, throughput);
   printf("%ld ", throughput);
 
   
@@ -358,11 +358,11 @@ cycle_t bench_cavs_idct8_add_c(){
 }
 
 int main() {
-  bench_ps_stereo_interpolate();
   bench_scalarproduct_and_madd_int16();
   bench_scalarproduct_and_madd_int32();
   bench_ff_h264_idct_add();
   bench_ff_h264_luma_dc_dequant_idct();
+  bench_ps_stereo_interpolate();
   bench_ps_stereo_interpolate_ipdopd();
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();

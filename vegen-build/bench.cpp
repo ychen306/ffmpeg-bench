@@ -39,12 +39,12 @@ void ff_h264_idct_add(uint8_t * _dst, int16_t * _block, int stride);
 
 void ff_h264_luma_dc_dequant_idct(int16_t * _output, int16_t * _input, int qmul);
 
-// void ps_stereo_interpolate(INTFLOAT (* l)[2], INTFLOAT (* r)[2],INTFLOAT h[ 2][4],
-//     INTFLOAT h_step[ 2][4], int len);
+void ps_stereo_interpolate(INTFLOAT (* l)[2], INTFLOAT (* r)[2],INTFLOAT h[ 2][4],
+    INTFLOAT h_step[ 2][4], int len);
 
-// void ps_stereo_interpolate_ipdopd(INTFLOAT (* l)[2], INTFLOAT (* r)[2],
-//                                            INTFLOAT h[ 2][4], INTFLOAT h_step[ 2][4],
-//                                            int len);
+void ps_stereo_interpolate_ipdopd(INTFLOAT (* l)[2], INTFLOAT (* r)[2],
+                                           INTFLOAT h[ 2][4], INTFLOAT h_step[ 2][4],
+                                           int len);
 void h263_h_loop_filter(uint8_t * src, int stride, int qscale);
 
 void h263_v_loop_filter(uint8_t * src, int stride, int qscale);
@@ -167,52 +167,50 @@ cycle_t bench_ff_h264_luma_dc_dequant_idct() {
 // // this stuff doesn't work
 
 
-// cycle_t bench_ps_stereo_interpolate() {
-//     const int len = 42;
-//     srand(22);
-//     INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-//     INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-//     for (int i = 0; i < len; i++) {
-//         l[i] = (INTFLOAT (*)[2]) rand_array(2);
-//         r[i] = (INTFLOAT (*)[2]) rand_array(2);
-//     }
+cycle_t bench_ps_stereo_interpolate() {
+    const int len = 42;
+    srand(22);
+    INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    for (int i = 0; i < len; i++) {
+        l[i] = (INTFLOAT (*)[2]) rand_array(2);
+        r[i] = (INTFLOAT (*)[2]) rand_array(2);
+    }
 
-//     INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
-//     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
+    INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
+    INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
-//     BENCH_FUNC(ps_stereo_interpolate(*l, *r, *h, h_step, len), num_tests, throughput);
-//     printf("5: ");
-//     printf("%ld ", throughput);
+    BENCH_FUNC(ps_stereo_interpolate((INTFLOAT(*)[2])l, (INTFLOAT(*)[2])r, *h, h_step, len), num_tests, throughput);
+    printf("%ld ", throughput);
 
-//     free(l);
-//     free(r);
-//     free(h);
-//     return throughput;
-// }
+    free(l);
+    free(r);
+    free(h);
+    return throughput;
+}
 
 
-// cycle_t bench_ps_stereo_interpolate_ipdopd() {
-//     const int len = 42;
-//     srand(99);
-//     INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-//     INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-//     for (int i = 0; i < len; i++) {
-//         l[i] = (INTFLOAT (*)[2]) rand_array(2);
-//         r[i] = (INTFLOAT (*)[2]) rand_array(2);
-//     }
+cycle_t bench_ps_stereo_interpolate_ipdopd() {
+    const int len = 42;
+    srand(99);
+    INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    for (int i = 0; i < len; i++) {
+        l[i] = (INTFLOAT (*)[2]) rand_array(2);
+        r[i] = (INTFLOAT (*)[2]) rand_array(2);
+    }
 
-//     INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
-//     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
+    INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
+    INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
 
-//     BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
-//     printf("6: ");
-//     printf("%ld ", throughput);
+    BENCH_FUNC(ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len), num_tests, throughput);
+    printf("%ld ", throughput);
 
-//     free(l);
-//     free(r);
-//     free(h);
-//     return throughput;
-// }
+    free(l);
+    free(r);
+    free(h);
+    return throughput;
+}
 
 
 cycle_t bench_h263_h_loop_filter() {
@@ -311,8 +309,8 @@ int main() {
   // bench_scalarproduct_and_madd_int16();
   // bench_scalarproduct_and_madd_int32();
   bench_ff_h264_luma_dc_dequant_idct();
-  // bench_ps_stereo_interpolate();
-  // bench_ps_stereo_interpolate_ipdopd();
+  bench_ps_stereo_interpolate();
+  bench_ps_stereo_interpolate_ipdopd();
   bench_h263_h_loop_filter();
   bench_h263_v_loop_filter();
   bench_weight_h264_pixels16_8_c();
@@ -320,4 +318,5 @@ int main() {
   bench_put_h264_chroma_mc8();
   bench_avg_h264_chroma_mc8();
   bench_cavs_idct8_add_c();
+  printf("\n");
 }

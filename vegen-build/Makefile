@@ -13,8 +13,8 @@ h264-idct.o: vg-h264-idct.cpp
 # aacencdsp.o: aacencdsp.cpp
 # 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
-# aacpsdsp.o: aacpsdsp.cpp
-# 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
+aacpsdsp.o: vg-aacpsdsp.cpp
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
 h264_dsp.o: vg-h264_dsp.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
@@ -31,12 +31,12 @@ bench.o: bench.cpp
 test.o: test.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
-bench.vg: bench.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o # lossless_audiodsp.o aacencdsp.o \
-	aacpsdsp.o   
+bench.vg: bench.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o aacpsdsp.o \
+			# lossless_audiodsp.o aacencdsp.o
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
-test: test.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o # lossless_audiodsp.o aacencdsp.o \
-	aacpsdsp.o
+test: test.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o aacpsdsp.o \
+			# lossless_audiodsp.o aacencdsp.o
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
 save_results:

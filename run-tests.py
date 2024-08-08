@@ -1,11 +1,12 @@
 import subprocess
 import statistics
 # same order as reurn values of the functions
-kernels = ["ps_stereo_interpolate", "scalarproduct_and_madd_int16", "scalarproduct_and_madd_int32", "ff_h264_idct_add", "ff_h264_luma_dc_dequant_idct", 
-            "ps_stereo_interpolate_ipdopd", "h263_h_loop_filter", "h263_v_loop_filter", "weight_h264_pixels16_8_c",
+kernels = ["scalarproduct_and_madd_int16", "scalarproduct_and_madd_int32", "ff_h264_idct_add", "ff_h264_luma_dc_dequant_idct", 
+            "ps_stereo_interpolate", "ps_stereo_interpolate_ipdopd", "h263_h_loop_filter", "h263_v_loop_filter", "weight_h264_pixels16_8_c",
            "biweight_h264_pixels16_8_c", "put_h264_chroma_mc8", "avg_h264_chroma_mc8", "cavs_idct8_add_c"]
-vegen_kernels = ["ff_h264_idct_add", "ff_h264_luma_dc_dequant_idct", "h263_h_loop_filter", "h263_v_loop_filter", "weight_h264_pixels16_8_c",
-                 "biweight_h264_pixels16_8_c", "put_h264_chroma_mc8", "avg_h264_chroma_mc8", "cavs_idct8_add_c"]
+vegen_kernels = ["ff_h264_idct_add", "ff_h264_luma_dc_dequant_idct", "ps_stereo_interpolate", "ps_stereo_interpolate_ipdopd",
+                 "h263_h_loop_filter", "h263_v_loop_filter", "weight_h264_pixels16_8_c", "biweight_h264_pixels16_8_c",
+                 "put_h264_chroma_mc8", "avg_h264_chroma_mc8", "cavs_idct8_add_c"]
 vectorized_throughput = {name: [] for name in kernels}
 non_vectorized_throughput = {name: [] for name in kernels}
 vegen_throughput = {name:[] for name in vegen_kernels}
