@@ -241,7 +241,7 @@ void test_biweight_h264_pixels16_8_c(){
 
 void test_put_h264_chroma_mc8(){
     srand(49);
-    uint8_t *_src = rand_array_u8(64);
+    uint8_t *_src = rand_array_u8(128);
     int h = 8;
     ptrdiff_t stride = 8;
     uint8_t _dst[64] = { 0 };
@@ -257,7 +257,7 @@ void test_put_h264_chroma_mc8(){
 
 void test_avg_h264_chroma_mc8(){
     srand(38);
-    uint8_t *_src = rand_array_u8(64);
+    uint8_t *_src = rand_array_u8(128);
     int h = 8;
     ptrdiff_t stride = 8;
     uint8_t _dst[64] = { 0 };
