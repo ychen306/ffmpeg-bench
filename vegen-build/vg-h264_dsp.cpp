@@ -68,7 +68,7 @@ void put_h264_chroma_mc8(uint8_t *_dst, const uint8_t *_src, ptrdiff_t stride, i
         with_threads(y, h, 1){
           int i = y*stride;
           with_threads(x, 8, 8){
-              op_put(dst[x + i], (A*src[x + i + 1] + B*src[x + i + 1] + 
+              op_put(dst[x + i], (A*src[x + i] + B*src[x + i + 1] + 
                       C*src[stride + x + i] + D*src[stride + x + i + 1]));
           }
         }
@@ -101,7 +101,6 @@ void avg_h264_chroma_mc8(uint8_t *_dst, const uint8_t *_src, ptrdiff_t stride, i
     const int B=(  x)*(8-y);
     const int C=(8-x)*(  y);
     const int D=(  x)*(  y);
-    int i;
     stride >>= sizeof(pixel)-1;
     
     // assert(x<8 && y<8 && x>=0 && y>=0);
@@ -110,7 +109,7 @@ void avg_h264_chroma_mc8(uint8_t *_dst, const uint8_t *_src, ptrdiff_t stride, i
         with_threads(y, h, 1){
           int i = y*stride;
           with_threads(x, 8, 8){
-              op_avg(dst[x + i], (A*src[x + i + 1] + B*src[x + i + 1] + 
+              op_avg(dst[x + i], (A*src[x + i] + B*src[x + i + 1] + 
                       C*src[stride + x + i] + D*src[stride + x + i + 1]));
           }
         }

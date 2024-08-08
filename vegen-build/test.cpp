@@ -279,7 +279,7 @@ void test_cavs_idct8_add_c(){
     for (int i = 0; i < 64; i++)
 	    block[i] >>= 8;
     cavs_idct8_add_c(dst, block, stride);
-    for(int i = 0; i<8; i++){
+    for(int i = 0; i<64; i++){
         printf("%" PRIu8 " ", dst[i]);
     }
     printf("\n \n");
@@ -291,15 +291,15 @@ void test_cavs_idct8_add_c(){
 
 
 int main(){
-    test_ff_h264_idct_add();
-    // test_scalarproduct_and_madd_int16();
-    // test_scalarproduct_and_madd_int32();
-    test_ff_h264_luma_dc_dequant_idct();
-    test_h263_h_loop_filter();
-    test_h263_v_loop_filter();
-    test_weight_h264_pixels16_8_c();
+    // test_ff_h264_idct_add();
+    // // test_scalarproduct_and_madd_int16();
+    // // test_scalarproduct_and_madd_int32();
+    // test_ff_h264_luma_dc_dequant_idct();
+    // test_h263_h_loop_filter();
+    // test_h263_v_loop_filter();
+    // test_weight_h264_pixels16_8_c();
     // test_biweight_h264_pixels16_8_c();  
-    // test_put_h264_chroma_mc8();
-    // test_avg_h264_chroma_mc8();
-    test_cavs_idct8_add_c();
+    test_put_h264_chroma_mc8();
+    test_avg_h264_chroma_mc8();
+    // test_cavs_idct8_add_c();
 }
