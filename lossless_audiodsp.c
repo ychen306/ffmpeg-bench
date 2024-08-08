@@ -14,6 +14,12 @@ int32_t scalarproduct_and_madd_int16(int16_t *__restrict__ v1, const int16_t *__
         res   += *v1 * *v2++;
         *v1++ += mul * *v3++;
     } while (order-=2);
+    /*
+    for (int i = 0; i < order; i++) {
+      res += v1[i] * v2[i];
+      v1[i] += mul * v3[i];
+    }
+    */
     return res;
 }
 

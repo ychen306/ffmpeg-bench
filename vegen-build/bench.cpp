@@ -298,7 +298,7 @@ cycle_t bench_weight_h264_pixels16_8_c(){
 // }
 
 cycle_t bench_cavs_idct8_add_c(){
-  int stride = 4;
+  int stride = 8;
   srand(71);
   uint8_t *dst = rand_array_u8(4 * 4);
   int16_t *block = rand_array_16(4 * 4);

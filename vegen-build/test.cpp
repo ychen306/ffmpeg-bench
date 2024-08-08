@@ -272,12 +272,14 @@ void test_weight_h264_pixels16_8_c(){
 // }
 
 void test_cavs_idct8_add_c(){
-    int stride = 4;
+    int stride = 8;
     srand(71);
     uint8_t dst[64] = { 0 };
     int16_t *block = rand_array_16(64);
+    for (int i = 0; i < 64; i++)
+	    block[i] >>= 8;
     cavs_idct8_add_c(dst, block, stride);
-    for(int i = 0; i<16; i++){
+    for(int i = 0; i<8; i++){
         printf("%" PRIu8 " ", dst[i]);
     }
     printf("\n \n");

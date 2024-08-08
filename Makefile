@@ -1,8 +1,8 @@
 MAKE := make
-.PHONY: all clean benchmark run-tests cpp_build acc-tests
+.PHONY: all clean benchmark run-tests cpp_build acc-tests vg_build
 
 CC := clang-18
-all: bench bench.novec bench.asan test cpp_build test.asan
+all: bench bench.novec bench.asan test cpp_build test.asan vg_build
 all-tests: all run-tests
 SANITIZER := address
 
@@ -111,6 +111,9 @@ bench.novec: bench.novec.o h264-idct.novec.o lossless_audiodsp.novec.o aacencdsp
 
 cpp_build:
 	make -C cpp-build
+
+vg_build:
+	make -C vegen-build
 
 save_results:
 	make save_results -C cpp-build
