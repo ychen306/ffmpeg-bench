@@ -141,12 +141,12 @@ void test_ps_stereo_interpolate() {
 
     INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-    ps_stereo_interpolate(*l, *r, *h, h_step, len);
+    ps_stereo_interpolate((INTFLOAT (*)[2])l, (INTFLOAT (*)[2])r, *h, h_step, len);
     for(int i = 0; i < len; i++){
-        printf("%d ", *l[i][0]);
-        printf("%d ", *l[i][1]);
-        printf("%d ", *r[i][0]);
-        printf("%d ", *r[i][1]);
+        printf("%d ", ((INTFLOAT (*)[2])l)[i][0]);
+        printf("%d ", ((INTFLOAT (*)[2])l)[i][1]);
+        printf("%d ", ((INTFLOAT (*)[2])r)[i][0]);
+        printf("%d ", ((INTFLOAT (*)[2])r)[i][1]);
     }
     printf("\n \n");
     free(l);
@@ -166,12 +166,12 @@ void test_ps_stereo_interpolate_ipdopd() {
 
     INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
     INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-    ps_stereo_interpolate_ipdopd(*l, *r, *h, h_step, len);
-    for(int i = 0; i < len; i++){
-        printf("%d ", *l[i][0]);
-        printf("%d ", *l[i][1]);
-        printf("%d ", *r[i][0]);
-        printf("%d ", *r[i][1]);
+    ps_stereo_interpolate_ipdopd((INTFLOAT (*)[2])l, (INTFLOAT (*)[2])r, *h, h_step, len);
+    for (int i = 0; i < len; i++) {
+        printf("%d ", ((INTFLOAT (*)[2])l)[i][0]);
+        printf("%d ", ((INTFLOAT (*)[2])l)[i][1]);
+        printf("%d ", ((INTFLOAT (*)[2])r)[i][0]);
+        printf("%d ", ((INTFLOAT (*)[2])r)[i][1]);
     }
     printf("\n \n");
     free(l);
@@ -291,17 +291,17 @@ void test_cavs_idct8_add_c(){
 
 
 int main(){
-    // test_ff_h264_idct_add();
-    // // test_scalarproduct_and_madd_int16();
-    // // test_scalarproduct_and_madd_int32();
-    // test_ff_h264_luma_dc_dequant_idct();
+    test_ff_h264_idct_add();
+    // test_scalarproduct_and_madd_int16();
+    // test_scalarproduct_and_madd_int32();
+    test_ff_h264_luma_dc_dequant_idct();
     test_ps_stereo_interpolate();
     test_ps_stereo_interpolate_ipdopd();
-    // test_h263_h_loop_filter();
-    // test_h263_v_loop_filter();
-    // test_weight_h264_pixels16_8_c();
-    // test_biweight_h264_pixels16_8_c();  
-    // test_put_h264_chroma_mc8();
-    // test_avg_h264_chroma_mc8();
-    // test_cavs_idct8_add_c();
+    test_h263_h_loop_filter();
+    test_h263_v_loop_filter();
+    test_weight_h264_pixels16_8_c();
+    test_biweight_h264_pixels16_8_c();  
+    test_put_h264_chroma_mc8();
+    test_avg_h264_chroma_mc8();
+    test_cavs_idct8_add_c();
 }
