@@ -190,7 +190,7 @@ void test_ps_stereo_interpolate_ipdopd() {
 
 void test_h263_h_loop_filter() {
     srand(71);
-    const int stride = 3;
+    const int stride = 8;
     const int qscale = 24;
     uint8_t *src = rand_array_u8(7*stride+4);
     h263_h_loop_filter(src + 2, stride, qscale);
@@ -203,7 +203,7 @@ void test_h263_h_loop_filter() {
 
 void test_h263_v_loop_filter(){
     srand(13);
-    const int stride = 3;
+    const int stride = 8;
     const int qscale = 24;
     uint8_t *src = rand_array_u8(3*stride + 8);
     h263_v_loop_filter(src + 2 * stride, stride, qscale);
