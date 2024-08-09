@@ -1,7 +1,7 @@
 MAKE := make
 .PHONY: all clean benchmark run-tests cpp_build acc-tests vg_build
 
-CC := clang-18
+CC := cc
 all: bench bench.novec bench.asan test cpp_build test.asan vg_build
 all-tests: all run-tests
 SANITIZER := address

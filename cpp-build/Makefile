@@ -1,7 +1,7 @@
 MAKE := make
 .PHONY: all clean save_results diff
 
-CC := clang++-18
+CC := clang++
 all: bench test
 
 h264-idct.o: h264-idct.cpp
