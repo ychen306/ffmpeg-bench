@@ -132,51 +132,59 @@ void test_ff_h264_luma_dc_dequant_idct(){
 void test_ps_stereo_interpolate() {
     const int len = 42;
     srand(22);
-    INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-    INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    INTFLOAT l[len][2];
+    INTFLOAT r[len][2];
+    INTFLOAT h[2][4];
+    INTFLOAT h_step[2][4];
     for (int i = 0; i < len; i++) {
-        l[i] = (INTFLOAT (*)[2]) rand_array(2);
-        r[i] = (INTFLOAT (*)[2]) rand_array(2);
+      for (int j = 0; j < 2; j++) {
+        l[i][j] = ((unsigned)rand()) >> 24;
+        r[i][j] = ((unsigned)rand()) >> 24;
+      }
     }
-
-    INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
-    INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-    ps_stereo_interpolate((INTFLOAT (*)[2])l, (INTFLOAT (*)[2])r, *h, h_step, len);
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 4; j++) {
+        h[i][j] = ((unsigned)rand()) >> 24;
+        h_step[i][j] = ((unsigned)rand()) >> 24;
+      }
+    }
+    ps_stereo_interpolate(l, r, h, h_step, len);
     for(int i = 0; i < len; i++){
-        printf("%d ", ((INTFLOAT (*)[2])l)[i][0]);
-        printf("%d ", ((INTFLOAT (*)[2])l)[i][1]);
-        printf("%d ", ((INTFLOAT (*)[2])r)[i][0]);
-        printf("%d ", ((INTFLOAT (*)[2])r)[i][1]);
+        printf("%d ", l[i][0]);
+        printf("%d ", l[i][1]);
+        printf("%d ", r[i][0]);
+        printf("%d ", r[i][1]);
     }
     printf("\n \n");
-    free(l);
-    free(r);
-    free(h);
 }
 
 void test_ps_stereo_interpolate_ipdopd() {
     const int len = 42;
     srand(99);
-    INTFLOAT (**l)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
-    INTFLOAT (**r)[2] = (INTFLOAT (**)[2]) malloc(sizeof(INTFLOAT (*)[2]) * len);
+    INTFLOAT l[len][2];
+    INTFLOAT r[len][2];
+    INTFLOAT h[2][4];
+    INTFLOAT h_step[2][4];
     for (int i = 0; i < len; i++) {
-        l[i] = (INTFLOAT (*)[2]) rand_array(2);
-        r[i] = (INTFLOAT (*)[2]) rand_array(2);
+      for (int j = 0; j < 2; j++) {
+        l[i][j] = ((unsigned)rand()) >> 24;
+        r[i][j] = ((unsigned)rand()) >> 24;
+      }
     }
-
-    INTFLOAT (*h)[2][4] = (INTFLOAT (*)[2][4]) rand_array(2 * 4);
-    INTFLOAT h_step[2][4] = {*rand_array(4), *rand_array(4)};
-    ps_stereo_interpolate_ipdopd((INTFLOAT (*)[2])l, (INTFLOAT (*)[2])r, *h, h_step, len);
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 4; j++) {
+        h[i][j] = ((unsigned)rand()) >> 24;
+        h_step[i][j] = ((unsigned)rand()) >> 24;
+      }
+    }
+    ps_stereo_interpolate_ipdopd(l, r, h, h_step, len);
     for (int i = 0; i < len; i++) {
-        printf("%d ", ((INTFLOAT (*)[2])l)[i][0]);
-        printf("%d ", ((INTFLOAT (*)[2])l)[i][1]);
-        printf("%d ", ((INTFLOAT (*)[2])r)[i][0]);
-        printf("%d ", ((INTFLOAT (*)[2])r)[i][1]);
+        printf("%d ", l[i][0]);
+        printf("%d ", l[i][1]);
+        printf("%d ", r[i][0]);
+        printf("%d ", r[i][1]);
     }
     printf("\n \n");
-    free(l);
-    free(r);
-    free(h);
 }
 
 
