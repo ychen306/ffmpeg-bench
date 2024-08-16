@@ -319,7 +319,7 @@ cycle_t bench_biweight_h264_pixels16_8_c(){
 
 cycle_t bench_put_h264_chroma_mc8(){
   srand(49);
-  uint8_t *_src = rand_array_u8(64);
+  uint8_t *_src = rand_array_u8(128);
   int h = 8;
   ptrdiff_t stride = 8;
   uint8_t _dst[64];
@@ -333,7 +333,7 @@ cycle_t bench_put_h264_chroma_mc8(){
 
 cycle_t bench_avg_h264_chroma_mc8(){
   srand(38);
-  uint8_t *_src = rand_array_u8(64);
+  uint8_t *_src = rand_array_u8(128);
   int h = 8;
   ptrdiff_t stride = 8;
   uint8_t _dst[64];
@@ -348,8 +348,8 @@ cycle_t bench_avg_h264_chroma_mc8(){
 cycle_t bench_cavs_idct8_add_c(){
   int stride = 4;
   srand(71);
-  uint8_t *dst = rand_array_u8(4 * 4);
-  int16_t *block = rand_array_16(4 * 4);
+  uint8_t *dst = rand_array_u8(64);
+  int16_t *block = rand_array_16(64);
   BENCH_FUNC(ff_h264_idct_add(dst, block, stride), 1000, throughput);
   free(dst);
   free(block);
@@ -358,9 +358,9 @@ cycle_t bench_cavs_idct8_add_c(){
 }
 
 int main() {
-  bench_scalarproduct_and_madd_int16();
-  bench_scalarproduct_and_madd_int32();
   bench_ff_h264_idct_add();
+  // bench_scalarproduct_and_madd_int16();
+  // bench_scalarproduct_and_madd_int32();
   bench_ff_h264_luma_dc_dequant_idct();
   bench_ps_stereo_interpolate();
   bench_ps_stereo_interpolate_ipdopd();
@@ -371,4 +371,5 @@ int main() {
   bench_put_h264_chroma_mc8();
   bench_avg_h264_chroma_mc8();
   bench_cavs_idct8_add_c();
+  printf("\n");
 }

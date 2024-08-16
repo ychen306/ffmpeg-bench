@@ -138,14 +138,14 @@ void test_ps_stereo_interpolate() {
     INTFLOAT h_step[2][4];
     for (int i = 0; i < len; i++) {
       for (int j = 0; j < 2; j++) {
-        l[i][j] = ((unsigned)rand()) >> 24;
-        r[i][j] = ((unsigned)rand()) >> 24;
+        l[i][j] = ((unsigned)rand()) >>16;
+        r[i][j] = ((unsigned)rand()) >>16;
       }
     }
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 4; j++) {
-        h[i][j] = ((unsigned)rand()) >> 24;
-        h_step[i][j] = ((unsigned)rand()) >> 24;
+        h[i][j] = ((unsigned)rand()) >>16;
+        h_step[i][j] = ((unsigned)rand()) >>16;
       }
     }
     ps_stereo_interpolate(l, r, h, h_step, len);
@@ -167,14 +167,14 @@ void test_ps_stereo_interpolate_ipdopd() {
     INTFLOAT h_step[2][4];
     for (int i = 0; i < len; i++) {
       for (int j = 0; j < 2; j++) {
-        l[i][j] = ((unsigned)rand()) >> 24;
-        r[i][j] = ((unsigned)rand()) >> 24;
+        l[i][j] = ((unsigned)rand()) >>16;
+        r[i][j] = ((unsigned)rand()) >>16;
       }
     }
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 4; j++) {
-        h[i][j] = ((unsigned)rand()) >> 24;
-        h_step[i][j] = ((unsigned)rand()) >> 24;
+        h[i][j] = ((unsigned)rand()) >>16;
+        h_step[i][j] = ((unsigned)rand()) >>16;
       }
     }
     ps_stereo_interpolate_ipdopd(l, r, h, h_step, len);
