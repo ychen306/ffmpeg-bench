@@ -41,7 +41,7 @@ void ps_stereo_interpolate(INTFLOAT (*l)[2], INTFLOAT (*r)[2],INTFLOAT h[2][4],
     UINTFLOAT hs3 = h_step[0][3];
     int n;
 
-    with_threads(n, len, 2){
+    with_threads(n, len, 8){
         //l is s, r is d
         INTFLOAT l_re = l[n][0];
         INTFLOAT l_im = l[n][1];
@@ -72,7 +72,7 @@ void ps_stereo_interpolate_ipdopd(INTFLOAT (* l)[2], INTFLOAT (* r)[2],
     UINTFLOAT hs03 = h_step[0][3], hs13 = h_step[1][3];
     int n;
 
-    with_threads(n, len, 2){
+    with_threads(n, len, 8){
         //l is s, r is d
         INTFLOAT l_re = l[n][0];
         INTFLOAT l_im = l[n][1];
