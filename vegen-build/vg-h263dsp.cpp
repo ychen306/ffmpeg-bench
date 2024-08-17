@@ -20,7 +20,7 @@ const uint8_t ff_h263_loop_filter_strength[32] = {
 void h263_h_loop_filter(uint8_t *src, int stride, int qscale){
     int y;
     const uint8_t strength = ff_h263_loop_filter_strength[qscale];
-    with_threads(y, 8, 4){
+    with_threads(y, 8, 8){
         int16_t d1, d2, ad1;
         int16_t p0 = src[y * stride - 2];
         int16_t p1 = src[y * stride - 1];
@@ -61,7 +61,7 @@ void h263_h_loop_filter(uint8_t *src, int stride, int qscale){
 void h263_v_loop_filter(uint8_t *__restrict__ src, int stride, int qscale){
     int x;
     const uint8_t strength = ff_h263_loop_filter_strength[qscale];
-    with_threads(x, 8, 4){
+    with_threads(x, 8, 8){
         int16_t d1, d2, ad1;
         int16_t p0 = src[x - 2 * stride];
         int16_t p1 = src[x - 1 * stride];
