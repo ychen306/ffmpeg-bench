@@ -25,13 +25,16 @@ h263dsp.o: vg-h263dsp.cpp
 cavsdsp.o: vg-cavsdsp.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
+diracdsp.o: vg-diracdsp.cpp
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native	
+
 bench.o: bench.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
 test.o: test.cpp
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
-bench.vg: bench.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o aacpsdsp.o \
+bench.vg: bench.o h264-idct.o h263dsp.o cavsdsp.o h264_dsp.o aacpsdsp.o diracdsp.o \
 			# lossless_audiodsp.o aacencdsp.o
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 

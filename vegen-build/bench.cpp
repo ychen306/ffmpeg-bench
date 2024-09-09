@@ -60,6 +60,12 @@ void put_h264_chroma_mc8(uint8_t * _dst /*align 8*/, const uint8_t * _src /*alig
 
 void cavs_idct8_add_c(uint8_t * dst, int16_t * block, ptrdiff_t stride);
 
+void dirac_hpel_filter(uint8_t *dsth, uint8_t *dstv, uint8_t *dstc, uint8_t *src,
+                              int stride, int width, int height);
+
+void put_signed_rect_clamped_8bit_c(uint8_t *dst, int dst_stride, 
+                                      const uint8_t *_src, int src_stride, int width, int height);
+
 #define BENCH_FUNC(FUNC_W_ARGS, NUM_TESTS, THROUGHPUT) \
         cycle_t THROUGHPUT;\
         do {cycle_t begin, end, elapsed1, elapsed2;     \
@@ -304,6 +310,33 @@ cycle_t bench_cavs_idct8_add_c(){
   return throughput;
 }
 
+cycle_t bench_dirac_hpel_filter(){
+  int stride = 8;
+  int width = 8;
+  int height = 8;
+  uint8_t dsth[64];
+  uint8_t dstv[64];
+  uint8_t dstc[64];
+  uint8_t *src = rand_array_u8(64);
+  BENCH_FUNC(dirac_hpel_filter(dsth, dstv, dstc, src, stride, width, height), 1000, throughput);
+  // free(src); // double free error when uncommented
+  printf("%ld ", throughput);
+  return throughput;
+}
+
+cycle_t bench_put_signed_rect_clamped_8bit_c(){
+  int dst_stride = 8;
+  int src_stride = 8;
+  int width = 8;
+  int height = 8;
+  uint8_t dst[64];
+  uint8_t *src = rand_array_u8(64);
+  BENCH_FUNC(put_signed_rect_clamped_8bit_c(dst, dst_stride, src, src_stride, width, height), 1000, throughput);
+  free(src);
+  printf("%ld ", throughput);
+  return throughput;
+}
+
 int main() {
   bench_ff_h264_idct_add();
   // bench_scalarproduct_and_madd_int16();
@@ -318,5 +351,7 @@ int main() {
   bench_put_h264_chroma_mc8();
   bench_avg_h264_chroma_mc8();
   bench_cavs_idct8_add_c();
+  bench_dirac_hpel_filter();
+  bench_put_signed_rect_clamped_8bit_c();
   printf("\n");
 }

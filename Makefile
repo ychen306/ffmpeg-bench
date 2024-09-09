@@ -2,7 +2,7 @@ MAKE := make
 .PHONY: all clean benchmark run-tests cpp_build acc-tests vg_build
 
 CC := cc
-all: bench bench.novec bench.asan test cpp_build test.asan vg_build
+all: bench bench.asan test cpp_build test.asan vg_build #bench.novec
 all-tests: all run-tests
 SANITIZER := address
 
@@ -27,6 +27,9 @@ h263dsp.o: h263dsp.c
 cavsdsp.o: cavsdsp.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
+diracdsp.o: diracdsp.c
+	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native	
+
 bench.o: bench.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
@@ -34,7 +37,7 @@ test.o: test.c
 	$(CC) -O3 $^ -o $@ -c $(EXTRA_FLAGS) -march=native
 
 bench: bench.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
-	h264_dsp.o h263dsp.o cavsdsp.o
+	h264_dsp.o h263dsp.o cavsdsp.o diracdsp.o
 	$(CC) $^ -o $@ $(EXTRA_FLAGS)
 
 test: test.o h264-idct.o lossless_audiodsp.o aacencdsp.o aacpsdsp.o \
@@ -64,6 +67,9 @@ h263dsp.asan.o: h263dsp.c
 cavsdsp.asan.o: cavsdsp.c
 	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
+diracdsp.asan.o: diracdsp.c
+	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
+
 bench.asan.o: bench.c
 	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
@@ -71,11 +77,11 @@ test.asan.o: test.c
 	$(CC) -O0 $^ -o $@ -c -fsanitize=$(SANITIZER) -g
 
 test.asan: test.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o \
-				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o
+				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o diracdsp.asan.o
 	$(CC) -fsanitize=$(SANITIZER) $^ -o $@ -g
 
 bench.asan: bench.asan.o h264-idct.asan.o lossless_audiodsp.asan.o aacencdsp.asan.o aacpsdsp.asan.o \
-				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o
+				h263dsp.asan.o h264_dsp.asan.o cavsdsp.asan.o diracdsp.asan.o
 	$(CC) -fsanitize=$(SANITIZER) $^ -o $@ -g
 
 ###### Non-Vectorized Build ######
